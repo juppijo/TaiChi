@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Die 8 Brokate - Qigong Begleiter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .transition-all { transition: all 0.3s ease; }
+        .music-paused { opacity: 0.5; }
+        /* Versteckt den Cursor im Vollbild bei Inaktivität (optional) */
+        :fullscreen { cursor: auto; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 via-amber-50 to-emerald-50 min-h-screen">
+
+    <div id="app"></div>
+
+    <audio id="background-music" loop preload="auto">
+        <source src="Gayatri Mantra.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const brokate = [
+            {
+                name: "Zwei Hände stützen den Himmel",
+                chinesisch: "Shuang Shou Tuo Tian Li San Jiao",
+                anleitung: "Aus der Grundposition einatmen und die Hände nach oben führen (Handflächen nach oben), in Brust- oder Kopfhöhe verhaken. Drehen und über den Kopf nach oben führen. Optional auf die Zehenspitzen kommen. Mit dem Ausatmen leicht in die Knie gehen und Arme mit Handflächen zur Erde nach unten führen.",
+                wirkung: "Streckt sanft die Wirbelsäule, lockert verspannte Schultern, erweitert die Lungenkapazität. Regt die Durchblutung des Gehirns und der Bauchorgane an. Wirkt regulierend auf den Dreifachen Erwärmer.",
+                wiederholungen: "3-9 mal",
+                farbe: "bg-emerald-100",
+                image: "zami_übung1.png"
+            },
+            {
+                name: "Den Bogen spannen und auf den Adler zielen",
+                chinesisch: "Zuo You Kai Gong Si She Diao",
+                anleitung: "In den Reiterstand gehen. Einatmen, Arme vor die Brust bringen, Hände zu Fäusten. Mit der Ausatmung Knie beugen und Bogen spannen: Vordere Hand formt mit Daumen und Zeigefinger ein L, hintere Hand spannt den Bogen. Zur Mitte zurückkommen und zur anderen Seite wiederholen.",
+                wirkung: "Wirkt auf Herz und Lunge, stärkt die Muskulatur der Beine, Brust, Arme und Schultern. Verbessert die Durchblutung und wirkt auf Augen und Leber. Verbessert Konzentration und Fokus.",
+                wiederholungen: "3-9 mal",
+                farbe: "bg-amber-100",
+                image: "zami_übung2.png"
+            },
+            {
+                name: "Himmel und Erde verbinden",
+                chinesisch: "Tiao Li Pi Wei Dan Ju Shou",
+                anleitung: "Linke Hand zu den unteren Rippen bringen (Handfläche nach unten), rechte Hand nach oben in Ohrhöhe. Einatmen. Mit dem Ausatmen die Hände auseinanderpressen und dabei leicht in die Knie gehen. Mit der anderen Seite wiederholen.",
+                wirkung: "Dehnt Rücken- und Bauchmuskulatur, massiert die Bauchorgane und den Verdauungstrakt. Stärkt besonders Magen und Milz. Wirkt sehr zentrierend und stabilisierend.",
+                wiederholungen: "3-9 mal pro Seite",
+                farbe: "bg-yellow-100",
+                image: "zami_übung3.png"
+            },
+            {
+                name: "Die 5 Übel & 7 Leiden hinter sich lassen",
+                chinesisch: "Wu Lao Qi Shang Xiang Hou Qiao",
+                anleitung: "Mit der Ausatmung zur Seite schauen und die Arme öffnen, so dass die Handflächen nach vorn zeigen. Finger sind gespreizt. Mit der Einatmung zur Mitte zurückkommen, Handflächen nach unten. Zur anderen Seite wiederholen.",
+                wirkung: "Stärkt die Augen und die Nackenmuskulatur, wirkt regulierend auf das Nervensystem bei Unruhe, Reizbarkeit und Schlaflosigkeit. Nimmt den Druck von den Schultern.",
+                wiederholungen: "3-9 mal pro Seite",
+                farbe: "bg-sky-100",
+                image: "zami_übung4.png"
+            },
+            {
+                name: "Die Ente wackelt mit dem Schwanz",
+                chinesisch: "Yao Tou Bai Wei Qu Xin Huo",
+                anleitung: "Füße in den Reiterstand stellen. Hände auf den Oberschenkeln abstützen. Einatmen. Mit der Ausatmung zum rechten Bein drehen, Brust und Kopf zum Oberschenkel bringen, über die Mitte zum linken Bein und wieder nach oben. Zur anderen Seite wiederholen.",
+                wirkung: "Eliminiert Hitze aus dem Herzen (Herzfeuer) und beruhigt das Herz. Klärt den Geist, wirkt bei Herzrasen, Schlafstörungen, innerer Unruhe und Stress. Löst Verspannungen in Hals- und Lendenwirbelsäule.",
+                wiederholungen: "3-9 mal",
+                farbe: "bg-teal-100",
+                image: "zami_übung5.png"
+            },
+            {
+                name: "Nach vorne beugen, um die Nieren zu stärken",
+                chinesisch: "Liang Shou Pan Jiao Gu Shen Yao",
+                anleitung: "Hände in den unteren Rücken auf Höhe der Nieren bringen. Einatmen, mit der Ausatmung nach vorne beugen und die Beinrückseiten entlang streichen. Beim Einatmen nach oben kommen und die Beinvorderseiten und Körpervorderseite entlang streichen. Hände nach oben zum Himmel heben.",
+                wirkung: "Stärkt die Nieren, die Lendenwirbelsäule, die Nacken- und Rückenmuskulatur. Löst Verspannungen in der Atemmuskulatur und regt die Blutzirkulation an.",
+                wiederholungen: "3-9 mal",
+                farbe: "bg-indigo-100",
+                image: "zami_übung6.png"
+            },
+            {
+                name: "Mit den Fäusten stoßen & mit den Augen funkeln",
+                chinesisch: "Wo Quan Nu Mu Zheng Qi Li",
+                anleitung: "In hüftweitem Stand, Knie gebeugt. Lockere Fäuste auf Höhe der Taille. Einatmen, mit der Ausatmung mit einer hand nach vorne boxen (Handrücken nach oben). Einatmen, Faust zurückziehen. Mit der anderen Seite wiederholen. Dabei einen fokussierten, scharfen Blick behalten.",
+                wirkung: "Die Yang-reichste Übung der acht Brokate. Verbessert Stärke und Vitalität. Vermindert Ärger und Stress, stärkt die Konzentration, Leber und Qi. Hilft bei der Entgiftung, stärkt Kraft, Muskulatur und Sehnen.",
+                wiederholungen: "3-9 mal",
+                farbe: "bg-red-100",
+                image: "zami_übung7.png"
+            },
+            {
+                name: "Den Rücken schütteln, um die 1000 Mühsale abzustreifen",
+                chinesisch: "Bei Hou Qi Dian Bai Bing Xiao",
+                anleitung: "Mit dem Einatmen auf die Zehenspitzen bzw. Fußballen kommen (stimuliert Niere 1 Punkt) und mit der Ausatmung die Fersen in den Boden senken. Dies mehrmals wiederholen.",
+                wirkung: "Vertreibt trübes Qi (Krankheitseinflüsse) aus dem Körper, stärkt Sehnen und Gelenke, löst Verspannungen und verteilt das Qi im ganzen Körper. Wirkt energetisierend bei Müdigkeit und regulierend auf das Nervensystem.",
+                wiederholungen: "3-9 mal",
+                farbe: "bg-purple-100",
+                image: "zami_übung8.png"
+            }
+        ];
+
+        let state = {
+            view: 'home',
+            currentBrokat: 0,
+            isPlaying: false,
+            timeLeft: 60,
+            timerInterval: null,
+            musicPlaying: false
+        };
+
+        let backgroundMusic;
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            // Gemeinsamer Vollbild-Button für alle Ansichten
+            const fullscreenBtn = `
+                <button onclick="toggleFullscreen()" class="fixed top-4 right-4 bg-white/50 hover:bg-white p-2 rounded-full shadow-md text-green-800 transition-all z-50">
+                    <i class="fas fa-expand"></i>
+                </button>
+            `;
+
+            if (state.view === 'home') {
+                app.innerHTML = fullscreenBtn + `
+                    <div class="max-w-4xl mx-auto p-8">
+                        <div class="text-center mb-12">
+                            <img src="zami_übung_Z.png" alt="Zaminia Qigong" class="w-full h-64 object-contain rounded-3xl shadow-2xl mb-8 border-4 border-white">
+                            <h1 class="text-6xl font-bold text-green-800 mb-4">八段錦</h1>
+                            <h2 class="text-3xl font-semibold text-green-700 mb-2">Die 8 Brokate</h2>
+                            <p class="text-lg text-green-600 italic">"In der Ruhe liegt die Kraft" — Ein Begleiter für dein tägliches Qigong</p>
+                        </div>
+                        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-green-100">
+                            <h3 class="text-2xl font-semibold text-green-800 mb-4 font-serif">Achtsamkeit in Bewegung</h3>
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                Diese jahrhundertealte Praxis harmonisiert den Fluss deines Qi. Wie Thich Nhat Hanh lehrt, 
+                                ist jeder Atemzug eine Rückkehr zum gegenwärtigen Moment.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-green-800 mb-2">Körperliche Wirkung</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li>• Vitalisierung der Organe</li>
+                                        <li>• Flexibilität der Wirbelsäule</li>
+                                        <li>• Stärkung des Immunsystems</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-amber-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-amber-800 mb-2">Geistige Wirkung</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li>• Tiefe innere Ruhe</li>
+                                        <li>• Mentale Klarheit</li>
+                                        <li>• Stressreduktion</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid gap-4">
+                            <button onclick="startPractice()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center justify-center gap-3 text-xl">
+                                <i class="fas fa-play"></i> Übung starten
+                            </button>
+                            <button onclick="setView('overview')" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center justify-center gap-3">
+                                <i class="fas fa-list"></i> Übersicht aller Übungen
+                            </button>
+                        </div>
+                    </div>`;
+            } else if (state.view === 'overview') {
+                app.innerHTML = fullscreenBtn + `
+                    <div class="max-w-6xl mx-auto p-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="text-3xl font-bold text-green-800">Übersicht</h2>
+                            <button onclick="setView('home')" class="bg-green-600 text-white py-2 px-6 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-home"></i> Zurück
+                            </button>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            ${brokate.map((b, i) => `
+                                <div class="${b.farbe} rounded-xl shadow-md p-6 border border-white/50">
+                                    <div class="flex gap-4">
+                                        <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-green-800 shrink-0">${i+1}</div>
+                                        <div>
+                                            <h3 class="font-bold text-gray-800">${b.name}</h3>
+                                            <p class="text-xs italic text-gray-600 mb-2">${b.chinesisch}</p>
+                                            <p class="text-sm text-gray-700">${b.anleitung}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+            } else if (state.view === 'practice') {
+                const b = brokate[state.currentBrokat];
+                const progress = ((state.currentBrokat) / brokate.length) * 100;
+                app.innerHTML = fullscreenBtn + `
+                    <div class="max-w-4xl mx-auto p-4">
+                        <div class="flex justify-between mb-6">
+                            <button onclick="setView('home')" class="bg-white p-2 px-4 rounded-lg shadow text-green-800"><i class="fas fa-home"></i></button>
+                            <button onclick="toggleMusic()" class="bg-white p-2 px-4 rounded-lg shadow text-green-800 ${!state.musicPlaying ? 'music-paused' : ''}">
+                                <i class="fas ${state.musicPlaying ? 'fa-volume-up' : 'fa-volume-mute'}"></i>
+                            </button>
+                            <div class="text-green-800 font-semibold italic text-lg leading-loose">Atme ein, atme aus...</div>
+                        </div>
+                        
+                        <div class="bg-white rounded-full h-3 mb-6 overflow-hidden">
+                            <div class="bg-green-500 h-full transition-all duration-500" style="width: ${progress}%"></div>
+                        </div>
+
+                        <div class="${b.farbe} rounded-3xl shadow-2xl p-8 mb-6 border-4 border-white transition-all">
+                            <div class="text-center mb-6">
+                                <span class="bg-white px-4 py-1 rounded-full text-green-800 font-bold text-sm mb-2 inline-block">ÜBUNG ${state.currentBrokat + 1} / 8</span>
+                                <h2 class="text-3xl font-bold text-gray-800 mb-1">${b.name}</h2>
+                                <p class="italic text-gray-600">${b.chinesisch}</p>
+                            </div>
+
+                            ${b.image ? `<div class="mb-6 flex justify-center"><img src="${b.image}" alt="${b.name}" class="rounded-xl shadow-md max-h-60 object-cover"></div>` : ''}
+
+                            <div class="flex justify-center mb-8">
+                                <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-inner border-4 border-green-200">
+                                    <span class="text-5xl font-mono font-bold text-green-800">${state.timeLeft}</span>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-4">
+                                <div class="bg-white/60 p-5 rounded-2xl">
+                                    <h4 class="font-bold text-gray-800 mb-2">Anleitung:</h4>
+                                    <p class="text-gray-700">${b.anleitung}</p>
+                                </div>
+                                <div class="bg-white/40 p-5 rounded-2xl">
+                                    <h4 class="font-bold text-gray-800 mb-2">Wirkung:</h4>
+                                    <p class="text-gray-600 text-sm italic">${b.wirkung}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center items-center gap-6 bg-white p-6 rounded-2xl shadow-lg">
+                            <button onclick="prevBrokat()" class="text-gray-400 hover:text-green-600 text-2xl"><i class="fas fa-step-backward"></i></button>
+                            <button onclick="togglePlay()" class="bg-green-600 text-white w-20 h-20 rounded-full text-3xl shadow-lg hover:scale-110 transition-all">
+                                <i class="fas ${state.isPlaying ? 'fa-pause' : 'fa-play'}"></i>
+                            </button>
+                            <button onclick="nextBrokat()" class="text-gray-400 hover:text-green-600 text-2xl"><i class="fas fa-step-forward"></i></button>
+                        </div>
+                    </div>`;
+            } else if (state.view === 'complete') {
+                app.innerHTML = fullscreenBtn + `
+                    <div class="flex items-center justify-center min-h-screen p-8 text-center">
+                        <div class="bg-white p-12 rounded-3xl shadow-2xl max-w-lg">
+                            <div class="text-7xl mb-6">✨</div>
+                            <h2 class="text-4xl font-bold text-green-800 mb-4">Wunderbar, Jup!</h2>
+                            <p class="text-xl text-gray-600 mb-8 font-serif italic">
+                                "Lächle deinem Körper zu. Du hast ihm heute ein großes Geschenk gemacht."
+                            </p>
+                            <button onclick="setView('home')" class="bg-green-600 text-white font-bold py-4 px-10 rounded-xl w-full shadow-lg">
+                                Zurück zur Stille
+                            </button>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function setView(v) {
+            state.view = v;
+            state.isPlaying = false;
+            clearInterval(state.timerInterval);
+            if (v === 'home' || v === 'overview' || v === 'complete') {
+                stopMusic();
+            }
+            render();
+        }
+
+        function startPractice() {
+            state.currentBrokat = 0;
+            state.timeLeft = 60;
+            setView('practice');
+            playMusic();
+        }
+
+        function togglePlay() {
+            state.isPlaying = !state.isPlaying;
+            if (state.isPlaying) {
+                state.timerInterval = setInterval(() => {
+                    state.timeLeft--;
+                    if (state.timeLeft <= 0) {
+                        nextBrokat();
+                    }
+                    render();
+                }, 1000);
+            } else {
+                clearInterval(state.timerInterval);
+            }
+            render();
+        }
+
+        function nextBrokat() {
+            if (state.currentBrokat < brokate.length - 1) {
+                state.currentBrokat++;
+                state.timeLeft = 60;
+                render();
+            } else {
+                setView('complete');
+            }
+        }
+
+        function prevBrokat() {
+            if (state.currentBrokat > 0) {
+                state.currentBrokat--;
+                state.timeLeft = 60;
+                render();
+            }
+        }
+
+        function playMusic() {
+            if (backgroundMusic) {
+                backgroundMusic.play().catch(e => console.log("Musik konnte nicht automatisch abgespielt werden:", e));
+                state.musicPlaying = true;
+            }
+        }
+
+        function stopMusic() {
+            if (backgroundMusic) {
+                backgroundMusic.pause();
+                backgroundMusic.currentTime = 0;
+                state.musicPlaying = false;
+            }
+        }
+
+        function toggleMusic() {
+            if (state.musicPlaying) {
+                stopMusic();
+            } else {
+                playMusic();
+            }
+            render();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            backgroundMusic = document.getElementById('background-music');
+            render();
+        });
+
+        // Reagiert auf Tastenkombinationen wie 'f' für Vollbild
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
