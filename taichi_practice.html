@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tai Chi Chuan - 108 ☯️</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        body.fullscreen {
+            padding: 0;
+        }
+
+        .container {
+            background: rgba(190, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+
+        .container.dark {
+            background: rgba(45, 55, 72, 0.95);
+            color: #e2e8f0;
+        }
+
+        .container.fullscreen {
+            max-width: 100%;
+            height: 100vh;
+            border-radius: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            transition: color 0.3s;
+        }
+
+        .container.dark h1 {
+            color: #e2e8f0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        .container.dark .subtitle {
+            color: #cbd5e0;
+        }
+
+        .header-image {
+            display: block;
+            margin: 0 auto 30px;
+            width: 30%;
+            max-width: 280px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .container.dark .header-image {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .current-section {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .container.dark .current-section {
+            background: linear-gradient(135deg, #4c51bf 0%, #553c9a 100%);
+        }
+
+        .form-display {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+
+        .container.fullscreen .form-display {
+            flex: 1;
+            min-height: auto;
+            font-size: 1.5em;
+        }
+
+        .container.fullscreen .form-number {
+            font-size: 5em;
+        }
+
+        .container.fullscreen .form-name {
+            font-size: 2.5em;
+        }
+
+        .container.fullscreen .form-name-de {
+            font-size: 2em;
+        }
+
+        .form-number {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .form-name {
+            font-size: 1.8em;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .form-name-de {
+            font-size: 1.3em;
+            color: #718096;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .speed-control {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .music-control {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .music-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .music-btn {
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(118, 75, 162, 0.9);
+            transform: scale(1.05);
+        }
+
+        .theme-btn {
+            position: fixed;
+            top: 20px;
+            right: 180px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            background: rgba(118, 75, 162, 0.9);
+            transform: scale(1.05);
+        }
+
+        .settings-panel {
+            transition: all 0.3s;
+        }
+
+        .container.fullscreen .settings-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .speed-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .speed-slider {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .speed-value {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .form-number {
+                font-size: 2em;
+            }
+
+            .form-name {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+    <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fullscreenBtn">⛶ Vollbild</button>
+    
+    <div class="container" id="container">
+
+        <h1>☯️ 太極拳 ☯️</h1>
+        <div class="subtitle">Tai Chi Chuan - 89 Formen (108)</div>
+
+        <img src="zami_übung_Z.png" alt="Zaminia Qigong" class="header-image">
+
+        <div class="current-section" id="section">Teil Eins - Die Erde</div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <div class="timer" id="timer">00:00 / 15:00</div>
+
+        <div class="form-display">
+            <div class="form-number" id="formNumber">1</div>
+            <div class="form-name" id="formNameFr">Position préparatoire</div>
+            <div class="form-name-de" id="formNameDe">Vorbereitende Position</div>
+        </div>
+
+        <div class="controls">
+            <button id="prevBtn" onclick="previousForm()">◀ Zurück</button>
+            <button id="startBtn" onclick="startPractice()">▶ Start</button>
+            <button id="pauseBtn" onclick="pausePractice()" disabled>⏸ Pause</button>
+            <button id="nextBtn" onclick="nextForm()">Vor ▶</button>
+            <button id="resetBtn" onclick="resetPractice()">↻ Zurücksetzen</button>
+        </div>
+
+        <div class="settings-panel">
+            <div class="speed-control">
+                <label class="speed-label">Geschwindigkeit anpassen</label>
+                <input type="range" min="5" max="15" value="10" class="speed-slider" id="speedSlider" oninput="updateSpeed()">
+                <div class="speed-value" id="speedValue">10 Sekunden pro Form</div>
+            </div>
+
+            <div class="music-control">
+                <label class="speed-label">Musik-Steuerung</label>
+                <div class="music-buttons">
+                    <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵 Musik An</button>
+                    <button class="music-btn" onclick="playBell()">🔔 Klangschale</button>
+                </div>
+                <label class="speed-label" style="font-size: 0.9em; margin-bottom: 5px;">Lautstärke</label>
+                <input type="range" min="0" max="100" value="70" class="speed-slider" id="volumeSlider" oninput="updateVolume()">
+                <div class="speed-value" id="volumeValue">70%</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bellSound" preload="auto"></audio>
+    <audio id="bgMusic" loop preload="auto"></audio>
+
+    <script>
+        const forms = [
+            {section: "Teil Eins - Die Erde", fr: "Position préparatoire", de: "Vorbereitende Position"},
+            {section: "Teil Eins - Die Erde", fr: "Mouvement initial du Taichi Chuan", de: "Erste Tai-Chi-Chuan-Bewegung"},
+            {section: "Teil Eins - Die Erde", fr: "Étreindre la queue du Paon", de: "Den Pfauenschwanz umarmen"},
+            {section: "Teil Eins - Die Erde", fr: "Simple fouet", de: "Einfache Peitsche"},
+            {section: "Teil Eins - Die Erde", fr: "Rapprocher les mains", de: "Hände zusammenführen"},
+            {section: "Teil Eins - Die Erde", fr: "La grue blanche déploie ses ailes", de: "Der weiße Kranich breitet seine Flügel aus"},
+            {section: "Teil Eins - Die Erde", fr: "Brosser le genou gauche", de: "Das linke Knie streifen"},
+            {section: "Teil Eins - Die Erde", fr: "Jouer de la guitare - Pipa", de: "Gitarre spielen - Pipa"},
+            {section: "Teil Eins - Die Erde", fr: "Brosser le genou gauche", de: "Das linke Knie streifen"},
+            {section: "Teil Eins - Die Erde", fr: "Brosser le genou droit", de: "Das rechte Knie streifen"},
+            {section: "Teil Eins - Die Erde", fr: "Brosser le genou gauche", de: "Das linke Knie streifen"},
+            {section: "Teil Eins - Die Erde", fr: "Jouer de la guitare", de: "Gitarre spielen"},
+            {section: "Teil Eins - Die Erde", fr: "Brosser le genou gauche", de: "Das linke Knie streifen"},
+            {section: "Teil Eins - Die Erde", fr: "Pas en avant et coup de poing", de: "Schritt vorwärts und Faustschlag"},
+            {section: "Teil Eins - Die Erde", fr: "Reculer et sceller", de: "Schritt zurück und Versiegelung"},
+            {section: "Teil Eins - Die Erde", fr: "Croiser les mains", de: "Hände kreuzen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Conduire le tigre et retourner à la montagne", de: "Den Tiger treiben und zum Berg zurückkehren"},
+            {section: "Teil Zwei - Der Mensch", fr: "Poing sous le coude", de: "Faust unter dem Ellbogen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Pas en arrière et repousser le singe (x3)", de: "Schritt zurück und den Affen abwehren (x3)"},
+            {section: "Teil Zwei - Der Mensch", fr: "Vol oblique (en diagonale)", de: "Schrägflug (diagonal)"},
+            {section: "Teil Zwei - Der Mensch", fr: "Rapprocher les mains", de: "Hände zusammenführen"},
+            {section: "Teil Zwei - Der Mensch", fr: "La grue blanche déploie ses ailes", de: "Der weiße Kranich breitet seine Flügel aus"},
+            {section: "Teil Zwei - Der Mensch", fr: "Brosser le genou gauche et pousser", de: "Das linke Knie streifen und schieben"},
+            {section: "Teil Zwei - Der Mensch", fr: "Aiguille au fond de la mer", de: "Nadel am unteren Ende des Meer"},
+            {section: "Teil Zwei - Der Mensch", fr: "Élever les mains et pousser", de: "Hände heben und schieben"},
+            {section: "Teil Zwei - Der Mensch", fr: "Poing près de la taille", de: "Faust nahe der Taille"},
+            {section: "Teil Zwei - Der Mensch", fr: "Pas en avant et coup de poing", de: "Schritt nach vorn und schlagen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Étreindre la queue du Paon", de: "Den Pfauenschwanz umarmen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Simple fouet", de: "Einmalige Peitsche"},
+            {section: "Teil Zwei - Der Mensch", fr: "Mains Nuages", de: "Hände wie Wolken"},
+            {section: "Teil Zwei - Der Mensch", fr: "Simple fouet", de: "Einmalige Peitsche"},
+            {section: "Teil Zwei - Der Mensch", fr: "Encourager le cheval", de: "Das Pferd anfeuern"},
+            {section: "Teil Zwei - Der Mensch", fr: "Coup de pied à droite", de: "Nach rechts treten"},
+            {section: "Teil Zwei - Der Mensch", fr: "Coup de pied à gauche", de: "Nach links treten"},
+            {section: "Teil Zwei - Der Mensch", fr: "Demi-tour et coup de pied", de: "Halbe Drehung und Tritt"},
+            {section: "Teil Zwei - Der Mensch", fr: "Brosser le genou gauche", de: "Linkes Knie streifen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Brosser le genou droit", de: "Rechtes Knie streifen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Pas en avant et coup vers le bas", de: "Schritt nach vorn und nach unten treten"},
+            {section: "Teil Zwei - Der Mensch", fr: "Poing près de la taille", de: "Faust nahe der Taille"},
+            {section: "Teil Zwei - Der Mensch", fr: "Pas en avant et coup de poing", de: "Schritt nach vorn und schlagen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Coup de talon droit", de: "Fersentritt rechts"},
+            {section: "Teil Zwei - Der Mensch", fr: "Frapper le tigre (à gauche et à droite)", de: "Den Tiger schlagen (links und rechts)"},
+            {section: "Teil Zwei - Der Mensch", fr: "Coup de talon droit", de: "Fersentritt rechts"},
+            {section: "Teil Zwei - Der Mensch", fr: "Double spire à travers les oreilles", de: "Doppelte Spirale durch die Ohren"},
+            {section: "Teil Zwei - Der Mensch", fr: "Coup de talon gauche", de: "Fersentritt links"},
+            {section: "Teil Zwei - Der Mensch", fr: "Tourner et coup de pied", de: "Drehen und treten"},
+            {section: "Teil Zwei - Der Mensch", fr: "Pas en avant et coup de poing", de: "Schritt nach vorn und schlagen"},
+            {section: "Teil Zwei - Der Mensch", fr: "Reculer et sceller", de: "Zurücktreten und abwehren"},
+            {section: "Teil Zwei - Der Mensch", fr: "Croiser les mains", de: "Hände verschränken"},
+            {section: "Teil Drei - Der Himmel", fr: "Conduire le tigre et retourner à la montagne", de: "Den Tiger zurück zum Berg treiben"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet en oblique", de: "Einmalige Peitsche im Winkel"},
+            {section: "Teil Drei - Der Himmel", fr: "Séparer la crinière du cheval sauvage (x3)", de: "Die Mähne des Wildpferdes teilen (x3)"},
+            {section: "Teil Drei - Der Himmel", fr: "Étreindre la queue du Paon", de: "Den Pfauenschwanz umarmen"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet", de: "Einzelner Peitschenhieb"},
+            {section: "Teil Drei - Der Himmel", fr: "Belle Dame à la navette", de: "Schöne Dame mit dem Weberschiffchen"},
+            {section: "Teil Drei - Der Himmel", fr: "Étreindre la queue du Paon", de: "Den Pfauenschwanz umarmen"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet", de: "Einzelner Peitschenhieb"},
+            {section: "Teil Drei - Der Himmel", fr: "Mains Nuages", de: "Wolkenhände"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet", de: "Einzelner Peitschenhieb"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet posture plus basse", de: "Einzelner Peitschenhieb, tiefere Haltung"},
+            {section: "Teil Drei - Der Himmel", fr: "Le coq doré sur une patte (et sur l'autre)", de: "Der goldene Hahn auf einem Bein (und dem anderen)"},
+            {section: "Teil Drei - Der Himmel", fr: "Pas en arrière et repousser le singe (x3)", de: "Zurücktreten und den Affen wegschieben (x3)"},
+            {section: "Teil Drei - Der Himmel", fr: "Vol oblique (en diagonale)", de: "Schrägflug (diagonal)"},
+            {section: "Teil Drei - Der Himmel", fr: "Rapprocher les mains", de: "Hände zusammenführen"},
+            {section: "Teil Drei - Der Himmel", fr: "La grue blanche déploie ses ailes", de: "Der weiße Kranich breitet seine Flügel aus"},
+            {section: "Teil Drei - Der Himmel", fr: "Brosser le genou gauche et pousser", de: "Das linke Knie streifen und schieben"},
+            {section: "Teil Drei - Der Himmel", fr: "Aiguille au fond de la mer", de: "Nadel am Meeresgrund"},
+            {section: "Teil Drei - Der Himmel", fr: "Élever les bras et pousser", de: "Arme heben und schieben"},
+            {section: "Teil Drei - Der Himmel", fr: "Le serpent blanc darde sa langue", de: "Die weiße Schlange züngelt"},
+            {section: "Teil Drei - Der Himmel", fr: "Pas en avant et coup de poing", de: "Vorwärtstreten und schlagen"},
+            {section: "Teil Drei - Der Himmel", fr: "Étreindre la queue du Paon", de: "Den Pfauenschwanz umarmen"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet", de: "Einzelner Peitschenhieb"},
+            {section: "Teil Drei - Der Himmel", fr: "Mains Nuages", de: "Wolkenhände"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet", de: "Einzelner Peitschenhieb"},
+            {section: "Teil Drei - Der Himmel", fr: "Encourager le cheval", de: "Das Pferd ermutigen"},
+            {section: "Teil Drei - Der Himmel", fr: "Coup pointé de la paume", de: "Zeigender Handflächenschlag"},
+            {section: "Teil Drei - Der Himmel", fr: "Demi-tour et coup de pied croisé", de: "Halbe Drehung und Kreuztritt"},
+            {section: "Teil Drei - Der Himmel", fr: "Pas en avant et coup de poing à l'aine", de: "Schritt vorwärts und Tiefschlag"},
+            {section: "Teil Drei - Der Himmel", fr: "Étreindre la queue du Paon", de: "Den Pfauenschwanz umarmen"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet", de: "Einzelner Peitschenhieb"},
+            {section: "Teil Drei - Der Himmel", fr: "Simple fouet posture plus basse", de: "Einzelner Peitschenhieb in tiefer Haltung"},
+            {section: "Teil Drei - Der Himmel", fr: "Pas en avant et coup de poing croisé", de: "Schritt vorwärts und Kreuzschlag"},
+            {section: "Teil Drei - Der Himmel", fr: "Pas en arrière et chevaucher le tigre", de: "Schritt zurück und den Tiger reiten"},
+            {section: "Teil Drei - Der Himmel", fr: "Pivoter, frapper le coup de pied", de: "Drehung, Tritt"},
+            {section: "Teil Drei - Der Himmel", fr: "Soulever l'arc et Viser le tigre", de: "Den Bogen heben und auf den Tiger zielen"},
+            {section: "Teil Drei - Der Himmel", fr: "Pas en avant et coup de poing", de: "Schritt vorwärts und Schlag"},
+            {section: "Teil Drei - Der Himmel", fr: "Reculer et sceller", de: "Schritt zurück und Versiegelung"},
+            {section: "Teil Drei - Der Himmel", fr: "Croiser les mains", de: "Hände kreuzen"},
+            {section: "Teil Drei - Der Himmel", fr: "Mouvement final du Taichi Chuan", de: "Abschließende Tai-Chi-Chuan-Bewegung"}
+        ];
+
+        let currentForm = 0;
+        let isRunning = false;
+        let isPaused = false;
+        let interval;
+        let secondsPerForm = 10;
+        let totalSeconds = 0;
+        let formTimer = 0;
+        let musicEnabled = false;
+
+        const bellSound = document.getElementById('bellSound');
+        const bgMusic = document.getElementById('bgMusic');
+
+        bellSound.src = 'Klangschale.mp3';
+        bgMusic.src = 'TaiChi.mp3';
+        
+        bgMusic.volume = 0.7;
+        bellSound.volume = 0.7;
+
+        // Audio vorladen
+        bellSound.load();
+        bgMusic.load();
+
+        function updateDisplay() {
+            const form = forms[currentForm];
+            document.getElementById('formNumber').textContent = currentForm + 1;
+            document.getElementById('formNameFr').textContent = form.fr;
+            document.getElementById('formNameDe').textContent = form.de;
+            document.getElementById('section').textContent = form.section;
+            
+            const progress = ((currentForm + 1) / forms.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            updateTimer();
+        }
+
+        function updateTimer() {
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalSecs = totalSeconds % 60;
+            const totalDuration = forms.length * secondsPerForm;
+            const totalMins = Math.floor(totalDuration / 60);
+            const totalSecsRemain = totalDuration % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${String(totalMinutes).padStart(2, '0')}:${String(totalSecs).padStart(2, '0')} / ${String(totalMins).padStart(2, '0')}:${String(totalSecsRemain).padStart(2, '0')}`;
+        }
+
+        function startPractice() {
+            if (!isRunning) {
+                isRunning = true;
+                isPaused = false;
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('pauseBtn').disabled = false;
+                document.getElementById('speedSlider').disabled = true;
+                
+                if (currentForm === 0 && totalSeconds === 0) {
+                    bellSound.play().catch(e => {
+                        console.log('Klangschale konnte nicht abgespielt werden:', e);
+                        alert('Bitte erlauben Sie Audio-Wiedergabe in Ihrem Browser');
+                    });
+                    setTimeout(() => {
+                        if (musicEnabled) {
+                            bgMusic.play().catch(e => {
+                                console.log('Hintergrundmusik konnte nicht abgespielt werden:', e);
+                            });
+                        }
+                    }, 2000);
+                } else {
+                    if (musicEnabled) {
+                        bgMusic.play().catch(e => {
+                            console.log('Hintergrundmusik konnte nicht abgespielt werden:', e);
+                        });
+                    }
+                }
+                
+                interval = setInterval(() => {
+                    formTimer++;
+                    totalSeconds++;
+                    updateTimer();
+                    
+                    if (formTimer >= secondsPerForm) {
+                        formTimer = 0;
+                        currentForm++;
+                        
+                        if (currentForm >= forms.length) {
+                            endPractice();
+                        } else {
+                            updateDisplay();
+                        }
+                    }
+                }, 1000);
+            }
+        }
+
+        function pausePractice() {
+            if (isRunning && !isPaused) {
+                isPaused = true;
+                clearInterval(interval);
+                bgMusic.pause();
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('pauseBtn').disabled = true;
+            }
+        }
+
+        function resetPractice() {
+            clearInterval(interval);
+            isRunning = false;
+            isPaused = false;
+            currentForm = 0;
+            totalSeconds = 0;
+            formTimer = 0;
+            
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('speedSlider').disabled = false;
+            
+            updateDisplay();
+        }
+
+        function endPractice() {
+            clearInterval(interval);
+            bgMusic.pause();
+            // bellSound.play().catch(e => console.log('Bell sound not available'));
+            
+            setTimeout(() => {
+                alert('Tai Chi Übung abgeschlossen! 🙏');
+                resetPractice();
+            }, 500);
+        }
+
+        function updateSpeed() {
+            secondsPerForm = parseInt(document.getElementById('speedSlider').value);
+            document.getElementById('speedValue').textContent = secondsPerForm + ' Sekunden pro Form';
+            updateTimer();
+        }
+
+        function nextForm() {
+            if (currentForm < forms.length - 1) {
+                currentForm++;
+                formTimer = 0;
+                updateDisplay();
+            }
+        }
+
+        function previousForm() {
+            if (currentForm > 0) {
+                currentForm--;
+                formTimer = 0;
+                updateDisplay();
+            }
+        }
+
+        function toggleMusic() {
+            musicEnabled = !musicEnabled;
+            const btn = document.getElementById('musicToggle');
+            
+            if (musicEnabled) {
+                btn.textContent = '🎵 Musik Aus';
+                btn.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                if (isRunning && !isPaused) {
+                    bgMusic.play().catch(e => {
+                        console.log('Hintergrundmusik konnte nicht abgespielt werden:', e);
+                        alert('Bitte erlauben Sie Audio-Wiedergabe');
+                    });
+                }
+            } else {
+                btn.textContent = '🎵 Musik An';
+                btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                bgMusic.pause();
+            }
+        }
+
+        function playBell() {
+            bellSound.currentTime = 0;
+            bellSound.play().catch(e => {
+                console.log('Klangschale konnte nicht abgespielt werden:', e);
+                alert('Bitte erlauben Sie Audio-Wiedergabe in Ihrem Browser');
+            });
+        }
+
+        function updateVolume() {
+            const volume = parseInt(document.getElementById('volumeSlider').value) / 100;
+            bgMusic.volume = volume;
+            bellSound.volume = volume;
+            document.getElementById('volumeValue').textContent = Math.round(volume * 100) + '%';
+        }
+
+        function toggleFullscreen() {
+            const container = document.getElementById('container');
+            const btn = document.getElementById('fullscreenBtn');
+            const body = document.body;
+            
+            if (!document.fullscreenElement) {
+                // In Vollbild gehen
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+                container.classList.add('fullscreen');
+                body.classList.add('fullscreen');
+                btn.textContent = '✕ Vollbild beenden';
+            } else {
+                // Vollbild beenden
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                container.classList.remove('fullscreen');
+                body.classList.remove('fullscreen');
+                btn.textContent = '⛶ Vollbild';
+            }
+        }
+
+        // Vollbild-Status überwachen
+        document.addEventListener('fullscreenchange', function() {
+            const container = document.getElementById('container');
+            const btn = document.getElementById('fullscreenBtn');
+            const body = document.body;
+            
+            if (!document.fullscreenElement) {
+                container.classList.remove('fullscreen');
+                body.classList.remove('fullscreen');
+                btn.textContent = '⛶ Vollbild';
+            }
+        });
+
+        function toggleTheme() {
+            const container = document.getElementById('container');
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            
+            if (container.classList.contains('dark')) {
+                container.classList.remove('dark');
+                body.classList.remove('dark');
+                btn.textContent = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            } else {
+                container.classList.add('dark');
+                body.classList.add('dark');
+                btn.textContent = '☀️ Light';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Theme beim Laden wiederherstellen
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.getElementById('container').classList.add('dark');
+                document.body.classList.add('dark');
+                document.getElementById('themeBtn').textContent = '☀️ Light';
+            }
+        });
+
+        // Initialisierung
+        updateDisplay();
+    </script>
+</body>
+</html>
