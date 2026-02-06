@@ -32,7 +32,7 @@
         }
 
         .container {
-            background: rgba(190, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 800px;
@@ -82,8 +82,8 @@
         .header-image {
             display: block;
             margin: 0 auto 30px;
-            width: 30%;
-            max-width: 280px;
+            width: 33.33%;
+            max-width: 300px;
             height: auto;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -248,8 +248,8 @@
 
         .theme-btn {
             position: fixed;
-            top: 20px;
-            right: 180px;
+            top: 70px;
+            right: 20px;
             background: rgba(102, 126, 234, 0.9);
             color: white;
             border: none;
@@ -264,6 +264,30 @@
         .theme-btn:hover {
             background: rgba(118, 75, 162, 0.9);
             transform: scale(1.05);
+        }
+
+        .voice-btn {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+
+        .voice-btn:hover {
+            background: rgba(118, 75, 162, 0.9);
+            transform: scale(1.05);
+        }
+
+        .voice-btn.active {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         }
 
         .settings-panel {
@@ -368,12 +392,13 @@
     </style>
 </head>
 <body>
+    <button class="voice-btn" onclick="toggleVoice()" id="voiceBtn">🔊 Vorlesen An</button>
     <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
     <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fullscreenBtn">⛶ Vollbild</button>
     
     <div class="container" id="container">
-
-        <h1>☯️ 太極拳 ☯️</h1>
+        
+        <h1>☯️ 太極拳 Tai Chi ☯️</h1>
         <div class="subtitle">Tai Chi Chuan - 89 Formen (108)</div>
 
         <img src="zami_übung_Z.png" alt="Zaminia Qigong" class="header-image">
@@ -524,6 +549,7 @@
         let totalSeconds = 0;
         let formTimer = 0;
         let musicEnabled = false;
+        let voiceEnabled = false;
 
         const bellSound = document.getElementById('bellSound');
         const bgMusic = document.getElementById('bgMusic');
@@ -549,6 +575,26 @@
             document.getElementById('progress').style.width = progress + '%';
             
             updateTimer();
+            
+            // Vorlesen wenn aktiviert
+            if (voiceEnabled && isRunning) {
+                speakForm(form);
+            }
+        }
+
+        function speakForm(form) {
+            // Aktuelle Sprachausgabe stoppen
+            window.speechSynthesis.cancel();
+            
+            // Neue Sprachausgabe erstellen
+            const text = `Form ${currentForm + 1}. ${form.de}`;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'de-DE';
+            utterance.rate = 0.9; // Etwas langsamer für besseres Verständnis
+            utterance.pitch = 1;
+            utterance.volume = 0.8;
+            
+            window.speechSynthesis.speak(utterance);
         }
 
         function updateTimer() {
@@ -614,6 +660,7 @@
                 isPaused = true;
                 clearInterval(interval);
                 bgMusic.pause();
+                window.speechSynthesis.cancel(); // Sprachausgabe stoppen beim Pausieren
                 document.getElementById('startBtn').disabled = false;
                 document.getElementById('pauseBtn').disabled = true;
             }
@@ -768,6 +815,30 @@
             }
         }
 
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            const btn = document.getElementById('voiceBtn');
+            
+            if (voiceEnabled) {
+                btn.textContent = '🔊 Vorlesen Aus';
+                btn.classList.add('active');
+                localStorage.setItem('voice', 'enabled');
+                
+                // Teste Sprachausgabe
+                if (!isRunning) {
+                    const testUtterance = new SpeechSynthesisUtterance('Vorlesen aktiviert');
+                    testUtterance.lang = 'de-DE';
+                    testUtterance.rate = 0.9;
+                    window.speechSynthesis.speak(testUtterance);
+                }
+            } else {
+                btn.textContent = '🔊 Vorlesen An';
+                btn.classList.remove('active');
+                localStorage.setItem('voice', 'disabled');
+                window.speechSynthesis.cancel();
+            }
+        }
+
         // Theme beim Laden wiederherstellen
         window.addEventListener('load', function() {
             const savedTheme = localStorage.getItem('theme');
@@ -775,6 +846,13 @@
                 document.getElementById('container').classList.add('dark');
                 document.body.classList.add('dark');
                 document.getElementById('themeBtn').textContent = '☀️ Light';
+            }
+            
+            const savedVoice = localStorage.getItem('voice');
+            if (savedVoice === 'enabled') {
+                voiceEnabled = true;
+                document.getElementById('voiceBtn').textContent = '🔊 Vorlesen Aus';
+                document.getElementById('voiceBtn').classList.add('active');
             }
         });
 
