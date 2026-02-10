@@ -434,6 +434,12 @@
 
         <img src="zami_übung_Z.png" alt="Zaminia Qigong" class="header-image">
 
+         <div class="section-navigation">
+            <button class="section-btn" onclick="jumpToSection(1)">🌍 Teil 1 - Die Erde</button>
+            <button class="section-btn" onclick="jumpToSection(2)">👤 Teil 2 - Der Mensch</button>
+            <button class="section-btn" onclick="jumpToSection(3)">☁️ Teil 3 - Der Himmel</button>
+        </div>
+
         <div class="current-section" id="section">Teil Eins - Die Erde</div>
 
         <div class="progress-bar">
@@ -441,12 +447,6 @@
         </div>
 
         <div class="timer" id="timer">00:00 / 15:00</div>
-
-        <div class="section-navigation">
-            <button class="section-btn" onclick="jumpToSection(1)">🌍 Teil 1 - Die Erde</button>
-            <button class="section-btn" onclick="jumpToSection(2)">👤 Teil 2 - Der Mensch</button>
-            <button class="section-btn" onclick="jumpToSection(3)">☁️ Teil 3 - Der Himmel</button>
-        </div>
 
         <div class="form-display">
             <div class="form-number" id="formNumber">1</div>
@@ -578,7 +578,7 @@
             {section: "Teil Drei - Der Himmel", fr: "Mouvement final du Taichi Chuan", de: "Abschließende Tai-Chi-Chuan-Bewegung"}
         ];
 
-        const forms108 = [
+        const forms108b = [
           // Erster Abschnitt – Die Erde
           {section: "Teil Eins - Die Erde", de: "Grundhaltung", fr: "Posture fondamentale"},
           {section: "Teil Eins - Die Erde", de: "Beginn des Tai-Chi", fr: "Ouverture du Tai Chi"},
@@ -691,6 +691,124 @@
           {section: "Teil Drei - Der Himmel", de: "Scheinbarer Verschluss und Stoß", fr: "Fermeture apparente et pousser"},
           {section: "Teil Drei - Der Himmel", de: "Die Hände kreuzen", fr: "Croiser les mains"},
           {section: "Teil Drei - Der Himmel", de: "Abschluss des Tai-Chi", fr: "Fermeture du Tai Chi"}
+        ];
+
+        const forms108 = [
+
+          // Erster Abschnitt – Die Erde
+          {section: "Teil Eins - Die Erde", de: "Vorbereitungsstellung", fr: "Position préparatoire"},
+          {section: "Teil Eins - Die Erde", de: "Eröffnung des Tai Ji Quan", fr: "Ouverture du Tai Ji Quan"},
+          {section: "Teil Eins - Die Erde", de: "Den Pfauenschwanz umfassen (Peng)", fr: "Étreindre la queue du Paon (Peng)"},
+          {section: "Teil Eins - Die Erde", de: "Den Pfauenschwanz umfassen (Lü)", fr: "Étreindre la queue du Paon (Lü)"},
+          {section: "Teil Eins - Die Erde", de: "Den Pfauenschwanz umfassen (Ji)", fr: "Étreindre la queue du Paon (Ji)"},
+          {section: "Teil Eins - Die Erde", de: "Den Pfauenschwanz umfassen (An)", fr: "Étreindre la queue du Paon (An)"},
+          {section: "Teil Eins - Die Erde", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Eins - Die Erde", de: "Hände heben", fr: "Élever les mains"},
+          {section: "Teil Eins - Die Erde", de: "Schulterstoß", fr: "Coup d’épaule"},
+          {section: "Teil Eins - Die Erde", de: "Der weiße Kranich breitet seine Flügel aus", fr: "La grue blanche déploie ses ailes"},
+          {section: "Teil Eins - Die Erde", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Eins - Die Erde", de: "Die Laute spielen", fr: "Jouer du luth"},
+          {section: "Teil Eins - Die Erde", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Eins - Die Erde", de: "Rechtes Knie streifen und stoßen", fr: "Brosser le genou droit et pousser"},
+          {section: "Teil Eins - Die Erde", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Eins - Die Erde", de: "Die Laute spielen", fr: "Jouer du luth"},
+          {section: "Teil Eins - Die Erde", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Eins - Die Erde", de: "Vorwärtsschritt, abwehren und Fauststoß", fr: "Pas en avant, parer et coup de poing"},
+          {section: "Teil Eins - Die Erde", de: "Scheinbarer Rückzug und Stoß", fr: "Fermeture apparente et pousser"},
+          {section: "Teil Eins - Die Erde", de: "Hände kreuzen", fr: "Croiser les mains"},
+
+          // Zweiter Abschnitt – Der Mensch
+          {section: "Teil Zwei - Der Mensch", de: "Den Tiger führen und zum Berg zurückkehren", fr: "Conduire le tigre et retourner à la montagne"},
+          {section: "Teil Zwei - Der Mensch", de: "Den Pfauenschwanz umfassen", fr: "Étreindre la queue du Paon"},
+          {section: "Teil Zwei - Der Mensch", de: "Faust unter dem Ellbogen", fr: "Le poing sous le coude"},
+          {section: "Teil Zwei - Der Mensch", de: "Zurückweichen und den Affen vertreiben (rechts)", fr: "Reculer et repousser le singe (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Zurückweichen und den Affen vertreiben (links)", fr: "Reculer et repousser le singe (gauche)"},
+          {section: "Teil Zwei - Der Mensch", de: "Zurückweichen und den Affen vertreiben (rechts)", fr: "Reculer et repousser le singe (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Zurückweichen und den Affen vertreiben (links)", fr: "Reculer et repousser le singe (gauche)"},
+          {section: "Teil Zwei - Der Mensch", de: "Zurückweichen und den Affen vertreiben (rechts)", fr: "Reculer et repousser le singe (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Schräger Flug (rechts)", fr: "Vol oblique (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Hände heben", fr: "Élever les mains"},
+          {section: "Teil Zwei - Der Mensch", de: "Der weiße Kranich breitet seine Flügel aus", fr: "La grue blanche déploie ses ailes"},
+          {section: "Teil Zwei - Der Mensch", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Zwei - Der Mensch", de: "Die Nadel am Meeresgrund", fr: "L’aiguille au fond de la mer"},
+          {section: "Teil Zwei - Der Mensch", de: "Fächer durch den Rücken", fr: "Éventail à travers le dos"},
+          {section: "Teil Zwei - Der Mensch", de: "Drehen und schlagen", fr: "Tourner et frapper"},
+          {section: "Teil Zwei - Der Mensch", de: "Vorwärtsschritt, abwehren und Fauststoß", fr: "Pas en avant, parer et coup de poing"},
+          {section: "Teil Zwei - Der Mensch", de: "Schräger Flug (links)", fr: "Vol oblique (gauche)"},
+          {section: "Teil Zwei - Der Mensch", de: "Vorwärtsgehen und den Pfauenschwanz umfassen", fr: "Avancer et étreindre la queue du Paon"},
+          {section: "Teil Zwei - Der Mensch", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Zwei - Der Mensch", de: "Hände wie Wolken (rechts)", fr: "Mains comme des nuages (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Hände wie Wolken (links)", fr: "Mains comme des nuages (gauche)"},
+          {section: "Teil Zwei - Der Mensch", de: "Hände wie Wolken (rechts)", fr: "Mains comme des nuages (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Zwei - Der Mensch", de: "Die Mähne des Wildpferdes teilen (rechts)", fr: "Séparer la crinière du cheval sauvage (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Die Mähne des Wildpferdes teilen (links)", fr: "Séparer la crinière du cheval sauvage (gauche)"},
+          {section: "Teil Zwei - Der Mensch", de: "Die Mähne des Wildpferdes teilen (rechts)", fr: "Séparer la crinière du cheval sauvage (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Rechter Fußtritt", fr: "Coup de pied droit"},
+          {section: "Teil Zwei - Der Mensch", de: "Linker Fußtritt", fr: "Coup de pied gauche"},
+          {section: "Teil Zwei - Der Mensch", de: "Drehen und linker Fersentritt", fr: "Tourner et coup de talon gauche"},
+          {section: "Teil Zwei - Der Mensch", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Zwei - Der Mensch", de: "Rechtes Knie streifen und stoßen", fr: "Brosser le genou droit et pousser"},
+          {section: "Teil Zwei - Der Mensch", de: "Vorwärtsschritt und nach unten schlagen", fr: "Pas en avant et frapper vers le bas"},
+          {section: "Teil Zwei - Der Mensch", de: "Drehen und schlagen", fr: "Tourner et frapper"},
+          {section: "Teil Zwei - Der Mensch", de: "Aufwärtsschlag mit der Faust", fr: "Coup de poing remontant"},
+          {section: "Teil Zwei - Der Mensch", de: "Vorwärtsschritt, abwehren und Fauststoß", fr: "Pas en avant, parer et coup de poing"},
+          {section: "Teil Zwei - Der Mensch", de: "Rechter Fersentritt", fr: "Coup de talon droit"},
+          {section: "Teil Zwei - Der Mensch", de: "Den Tiger schlagen (links)", fr: "Frapper le tigre (gauche)"},
+          {section: "Teil Zwei - Der Mensch", de: "Den Tiger schlagen (rechts)", fr: "Frapper le tigre (droite)"},
+          {section: "Teil Zwei - Der Mensch", de: "Rechter Fersentritt", fr: "Coup de talon droit"},
+          {section: "Teil Zwei - Der Mensch", de: "Doppelstoß auf die Ohren", fr: "Double coup aux oreilles"},
+          {section: "Teil Zwei - Der Mensch", de: "Linker Fersentritt", fr: "Coup de talon gauche"},
+          {section: "Teil Zwei - Der Mensch", de: "Drehen und rechter Fersentritt", fr: "Tourner et coup de talon droit"},
+          {section: "Teil Zwei - Der Mensch", de: "Vorwärtsschritt, abwehren und Fauststoß", fr: "Pas en avant, parer et coup de poing"},
+          {section: "Teil Zwei - Der Mensch", de: "Scheinbarer Rückzug und Stoß", fr: "Fermeture apparente et pousser"},
+          {section: "Teil Zwei - Der Mensch", de: "Hände kreuzen", fr: "Croiser les mains"},
+
+          // Dritter Abschnitt – Der Himmel
+          {section: "Teil Drei - Der Himmel", de: "Den Tiger führen und zum Berg zurückkehren", fr: "Conduire le tigre et retourner à la montagne"},
+          {section: "Teil Drei - Der Himmel", de: "Den Pfauenschwanz umfassen", fr: "Étreindre la queue du Paon"},
+          {section: "Teil Drei - Der Himmel", de: "Schräge einfache Peitsche", fr: "Simple fouet oblique"},
+          {section: "Teil Drei - Der Himmel", de: "Die Mähne des Wildpferdes teilen (rechts)", fr: "Séparer la crinière du cheval sauvage (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Die Mähne des Wildpferdes teilen (links)", fr: "Séparer la crinière du cheval sauvage (gauche)"},
+          {section: "Teil Drei - Der Himmel", de: "Die Mähne des Wildpferdes teilen (rechts)", fr: "Séparer la crinière du cheval sauvage (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Den Pfauenschwanz umfassen", fr: "Étreindre la queue du Paon"},
+          {section: "Teil Drei - Der Himmel", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Drei - Der Himmel", de: "Das Jade-Mädchen webt das Schiffchen (rechts)", fr: "La fille de jade lance la navette (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Das Jade-Mädchen webt das Schiffchen (links)", fr: "La fille de jade lance la navette (gauche)"},
+          {section: "Teil Drei - Der Himmel", de: "Das Jade-Mädchen webt das Schiffchen (rechts)", fr: "La fille de jade lance la navette (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Das Jade-Mädchen webt das Schiffchen (links)", fr: "La fille de jade lance la navette (gauche)"},
+          {section: "Teil Drei - Der Himmel", de: "Den Pfauenschwanz umfassen", fr: "Étreindre la queue du Paon"},
+          {section: "Teil Drei - Der Himmel", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Drei - Der Himmel", de: "Hände wie Wolken (rechts)", fr: "Mains comme des nuages (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Hände wie Wolken (links)", fr: "Mains comme des nuages (gauche)"},
+          {section: "Teil Drei - Der Himmel", de: "Hände wie Wolken (rechts)", fr: "Mains comme des nuages (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Drei - Der Himmel", de: "Die Schlange kriecht nach unten", fr: "Le serpent descend en rampant"},
+          {section: "Teil Drei - Der Himmel", de: "Der goldene Hahn steht auf dem linken Bein", fr: "Le coq d’or se tient sur la jambe gauche"},
+          {section: "Teil Drei - Der Himmel", de: "Der goldene Hahn steht auf dem rechten Bein", fr: "Le coq d’or se tient sur la jambe droite"},
+          {section: "Teil Drei - Der Himmel", de: "Zurückweichen und den Affen vertreiben (rechts)", fr: "Reculer et repousser le singe (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Zurückweichen und den Affen vertreiben (links)", fr: "Reculer et repousser le singe (gauche)"},
+          {section: "Teil Drei - Der Himmel", de: "Zurückweichen und den Affen vertreiben (rechts)", fr: "Reculer et repousser le singe (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Schräger Flug (rechts)", fr: "Vol oblique (droite)"},
+          {section: "Teil Drei - Der Himmel", de: "Hände heben", fr: "Élever les mains"},
+          {section: "Teil Drei - Der Himmel", de: "Der weiße Kranich breitet seine Flügel aus", fr: "La grue blanche déploie ses ailes"},
+          {section: "Teil Drei - Der Himmel", de: "Linkes Knie streifen und stoßen", fr: "Brosser le genou gauche et pousser"},
+          {section: "Teil Drei - Der Himmel", de: "Die Nadel am Meeresgrund", fr: "L’aiguille au fond de la mer"},
+          {section: "Teil Drei - Der Himmel", de: "Drehen und schlagen", fr: "Tourner et frapper"},
+          {section: "Teil Drei - Der Himmel", de: "Vorwärtsschritt, abwehren und Fauststoß", fr: "Pas en avant, parer et coup de poing"},
+          {section: "Teil Drei - Der Himmel", de: "Schräger Flug (links)", fr: "Vol oblique (gauche)"},
+          {section: "Teil Drei - Der Himmel", de: "Vorwärtsgehen und den Pfauenschwanz umfassen", fr: "Avancer et étreindre la queue du Paon"},
+          {section: "Teil Drei - Der Himmel", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Drei - Der Himmel", de: "Hände wie Wolken", fr: "Mains comme des nuages"},
+          {section: "Teil Drei - Der Himmel", de: "Einfache Peitsche", fr: "Simple fouet"},
+          {section: "Teil Drei - Der Himmel", de: "Die Schlange kriecht nach unten (tiefe Variante)", fr: "Le serpent descend en rampant (variante basse)"},
+          {section: "Teil Drei - Der Himmel", de: "Vorwärts zu den sieben Sternen", fr: "Avancer vers les sept étoiles"},
+          {section: "Teil Drei - Der Himmel", de: "Zurückweichen und den Tiger reiten", fr: "Reculer et chevaucher le tigre"},
+          {section: "Teil Drei - Der Himmel", de: "Drehen und den Lotus fegen", fr: "Tourner et balayer le lotus"},
+          {section: "Teil Drei - Der Himmel", de: "Den Bogen spannen und auf den Tiger zielen", fr: "Bander l’arc et viser le tigre"},
+          {section: "Teil Drei - Der Himmel", de: "Vorwärtsschritt, abwehren und Fauststoß", fr: "Pas en avant, parer et coup de poing"},
+          {section: "Teil Drei - Der Himmel", de: "Abschluss des Tai Ji Quan", fr: "Fermeture du Tai Ji Quan"}
+
         ];
 
         const forms = forms108;
