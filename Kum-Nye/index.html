@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark" data-color="earth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kum Nye – Tibetisches Heilyoga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Ambient background -->
+  <div class="ambient" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Top Bar -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-left">
+      <span class="logo">
+        <span class="logo-sym">☸</span>
+        <span class="logo-text">Kum Nye</span>
+      </span>
+    </div>
+    <nav class="topbar-controls">
+      <!-- Sound Toggle -->
+      <button class="ctrl-btn" id="soundToggle" title="Ton an/aus">
+        <span id="soundIcon">♪</span>
+      </button>
+      <!-- Theme Mode -->
+      <button class="ctrl-btn" id="themeToggle" title="Hell/Dunkel">
+        <span id="themeIcon">☀</span>
+      </button>
+      <!-- Zen Mode -->
+      <button class="ctrl-btn" id="zenToggle" title="Zen-Modus">
+        <span>⊙</span>
+      </button>
+      <!-- Fullscreen -->
+      <button class="ctrl-btn" id="fullscreenBtn" title="Vollbild">
+        <span id="fsIcon">⛶</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Color Palette Dock -->
+  <div class="palette-dock" id="paletteDock">
+    <button class="swatch" data-color="earth"   title="Erde"      style="--sw:#b87b55"></button>
+    <button class="swatch" data-color="ocean"   title="Ozean"     style="--sw:#4a9e9e"></button>
+    <button class="swatch" data-color="forest"  title="Wald"      style="--sw:#4e8b5f"></button>
+    <button class="swatch" data-color="dawn"    title="Morgenrot" style="--sw:#c46b5a"></button>
+    <button class="swatch" data-color="amethyst" title="Amethyst" style="--sw:#7b68c8"></button>
+  </div>
+
+  <!-- Main App -->
+  <main class="app" id="app">
+
+    <!-- SCREEN 1: Selection -->
+    <section class="screen active" id="screenSelect">
+      <div class="screen-inner">
+        <div class="title-image-wrap">
+          <img src="Titel.jpg" alt="Kum Nye – Tibetisches Heilyoga" class="title-image" />
+          <div class="title-image-veil"></div>
+        </div>
+        <h1 class="headline">Wähle deine Praxis</h1>
+        <p class="subtitle">Tibetisches Heilyoga für Körper, Atem & Geist</p>
+
+        <div class="practice-grid">
+
+          <article class="practice-card" data-practice="bewegung" tabindex="0">
+            <div class="card-icon">🌿</div>
+            <h2 class="card-title">Sanfte Körper&shy;bewegungen</h2>
+            <p class="card-desc">Sehr langsam und bewusst ausgeführte Bewegungen, die Energie durch den Körper fließen lassen.</p>
+            <div class="card-exercises" id="ex-bewegung">
+              <label class="ex-item"><input type="checkbox" value="armkreisen" checked /><span>Arm-Kreisen</span><span class="ex-dur">5 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="wirbelsaeule" /><span>Wirbelsäulen-Welle</span><span class="ex-dur">8 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="hueften" /><span>Hüften öffnen</span><span class="ex-dur">6 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="nacken" /><span>Nacken-Lösung</span><span class="ex-dur">4 min</span></label>
+            </div>
+          </article>
+
+          <article class="practice-card" data-practice="atem" tabindex="0">
+            <div class="card-icon">🌬</div>
+            <h2 class="card-title">Atem&shy;übungen</h2>
+            <p class="card-desc">Der Atem als Brücke zwischen Körper und Geist – sanft und achtsam geführt.</p>
+            <div class="card-exercises" id="ex-atem">
+              <label class="ex-item"><input type="checkbox" value="4-7-8" checked /><span>4-7-8 Atemrhythmus</span><span class="ex-dur">7 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="vajra" /><span>Vajra-Atem</span><span class="ex-dur">10 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="9reinigend" checked /><span>9-Reinigungs-Atem</span><span class="ex-dur">6 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="tiefes" /><span>Tiefer Bauch-Atem</span><span class="ex-dur">5 min</span></label>
+            </div>
+          </article>
+
+          <article class="practice-card" data-practice="massage" tabindex="0">
+            <div class="card-icon">🤲</div>
+            <h2 class="card-title">Selbst&shy;massage</h2>
+            <p class="card-desc">Spezielle Massagetechniken zur Aktivierung der Lebensenergie (Nyam).</p>
+            <div class="card-exercises" id="ex-massage">
+              <label class="ex-item"><input type="checkbox" value="gesicht" checked /><span>Gesichts-Erweckung</span><span class="ex-dur">4 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="kopfhaut" /><span>Kopfhaut-Stimulation</span><span class="ex-dur">5 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="haende" checked /><span>Hand-Meridian-Massage</span><span class="ex-dur">6 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="fuesse" /><span>Fuß-Reflexzonen</span><span class="ex-dur">8 min</span></label>
+            </div>
+          </article>
+
+          <article class="practice-card" data-practice="stille" tabindex="0">
+            <div class="card-icon">✦</div>
+            <h2 class="card-title">Stille & innere Wahr&shy;nehmung</h2>
+            <p class="card-desc">Das Erspüren feiner innerer Empfindungen im Zustand ruhiger Offenheit.</p>
+            <div class="card-exercises" id="ex-stille">
+              <label class="ex-item"><input type="checkbox" value="koerperscan" checked /><span>Körper-Scan</span><span class="ex-dur">10 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="energiefeld" /><span>Energiefeld erspüren</span><span class="ex-dur">12 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="herzraum" checked /><span>Herzraum-Öffnung</span><span class="ex-dur">8 min</span></label>
+              <label class="ex-item"><input type="checkbox" value="schweigen" /><span>Schweigendes Sitzen</span><span class="ex-dur">15 min</span></label>
+            </div>
+          </article>
+
+        </div><!-- /.practice-grid -->
+
+        <!-- Duration Picker -->
+        <div class="duration-row">
+          <label class="dur-label">Gesamtdauer</label>
+          <div class="dur-options">
+            <button class="dur-btn active" data-min="10">10 min</button>
+            <button class="dur-btn" data-min="20">20 min</button>
+            <button class="dur-btn" data-min="30">30 min</button>
+            <button class="dur-btn" data-min="45">45 min</button>
+            <button class="dur-btn" data-min="60">60 min</button>
+          </div>
+        </div>
+
+        <button class="start-btn" id="startBtn">
+          <span class="start-symbol">⟳</span>
+          Praxis beginnen
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: Timer / Practice -->
+    <section class="screen" id="screenTimer">
+      <div class="screen-inner timer-layout">
+
+        <div class="title-image-wrap">
+          <img src="Titel.jpg" alt="Kum Nye – Tibetisches Heilyoga" class="title-image" />
+          <div class="title-image-veil"></div>
+        </div>
+
+        <!-- Exercise info -->
+        <div class="ex-info">
+          <p class="ex-category" id="exCategory">—</p>
+          <h2 class="ex-name" id="exName">—</h2>
+          <p class="ex-instruction" id="exInstruction">—</p>
+        </div>
+
+        <!-- Big breathing circle / timer -->
+        <div class="circle-wrap" id="circleWrap">
+          <svg class="circle-svg" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+            <circle class="c-track" cx="140" cy="140" r="120" />
+            <circle class="c-progress" id="cProgress" cx="140" cy="140" r="120"
+              stroke-dasharray="753.98" stroke-dashoffset="753.98" />
+          </svg>
+          <div class="circle-inner">
+            <div class="breath-anim" id="breathAnim"></div>
+            <div class="time-display" id="timeDisplay">00:00</div>
+            <div class="breath-cue" id="breathCue">Einatmen…</div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+          <button class="tc-btn" id="prevExBtn" title="Zurück">‹</button>
+          <button class="tc-btn primary" id="playPauseBtn" title="Start / Pause">▶</button>
+          <button class="tc-btn" id="nextExBtn" title="Weiter">›</button>
+        </div>
+
+        <!-- Progress bar exercises -->
+        <div class="ex-progress-bar" id="exProgressBar"></div>
+
+        <!-- Back button -->
+        <button class="back-btn" id="backBtn">← Zurück zur Auswahl</button>
+
+      </div>
+    </section>
+
+    <!-- SCREEN 3: Finished -->
+    <section class="screen" id="screenDone">
+      <div class="screen-inner done-layout">
+        <div class="done-symbol">☸</div>
+        <h2 class="done-title">Praxis vollendet</h2>
+        <p class="done-sub">Nimm einen Moment inne, bevor du weitermachst.</p>
+        <p class="done-quote" id="doneQuote"></p>
+        <button class="start-btn" id="restartBtn">Neue Praxis</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="KumNye.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
