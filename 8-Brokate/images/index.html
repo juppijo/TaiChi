@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Zenjio Photo Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a000f;
+  --bg2: #130020;
+  --bg3: #1a0030;
+  --accent: #7c3aed;
+  --accent2: #10b981;
+  --text: #e8e0f0;
+  --text2: #9a88b0;
+  --border: rgba(124,58,237,0.25);
+  --card-bg: rgba(26,0,48,0.85);
+  --slide-interval: 3000;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── LANDING ─────────────────────────────────── */
+#landing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: radial-gradient(ellipse at 50% 40%, #1e003a 0%, #0a000f 70%);
+}
+
+.logo {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  background: linear-gradient(135deg, #c084fc 0%, #7c3aed 50%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.3rem;
+}
+
+.logo-sub {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+  letter-spacing: 0.4em;
+  color: var(--text2);
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+}
+
+.drop-zone {
+  width: 100%;
+  max-width: 480px;
+  border: 1.5px dashed var(--accent);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: rgba(124,58,237,0.05);
+  position: relative;
+}
+
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: #c084fc;
+  background: rgba(124,58,237,0.12);
+}
+
+.drop-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.drop-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  opacity: 0.7;
+}
+
+.drop-zone p { color: var(--text2); font-size: 0.9rem; line-height: 1.6; }
+.drop-zone strong { color: var(--text); font-weight: 500; font-size: 1.05rem; display: block; margin-bottom: 0.4rem; }
+
+.version { margin-top: 2.5rem; color: var(--text2); font-size: 0.75rem; letter-spacing: 0.1em; }
+
+/* ── HEADER ───────────────────────────────────── */
+#app { display: none; flex-direction: column; min-height: 100vh; }
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(10,0,15,0.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.header-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #c084fc, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+}
+
+.img-count {
+  font-size: 0.78rem;
+  color: var(--text2);
+  background: rgba(124,58,237,0.15);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.spacer { flex: 1; }
+
+.btn {
+  background: rgba(124,58,237,0.18);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn:hover { background: rgba(124,58,237,0.35); border-color: var(--accent); }
+.btn:active { transform: scale(0.97); }
+.btn.green { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.3); }
+.btn.green:hover { background: rgba(16,185,129,0.35); border-color: var(--accent2); }
+.btn.active-mode { background: rgba(124,58,237,0.5); border-color: #c084fc; }
+
+/* ── GALLERY GRID ─────────────────────────────── */
+#gallery {
+  flex: 1;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.thumb-card {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  aspect-ratio: 1;
+}
+.thumb-card:hover {
+  transform: scale(1.04);
+  border-color: var(--accent);
+  box-shadow: 0 4px 24px rgba(124,58,237,0.3);
+  z-index: 2;
+}
+.thumb-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+.thumb-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  color: #ccc;
+  font-size: 0.7rem;
+  padding: 1rem 0.5rem 0.4rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thumb-card:hover .thumb-label { opacity: 1; }
+.thumb-num {
+  position: absolute;
+  top: 6px; left: 8px;
+  background: rgba(0,0,0,0.5);
+  color: var(--text2);
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── SLIDESHOW OVERLAY ────────────────────────── */
+#slideshow {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg);
+  flex-direction: column;
+}
+
+#slideshow.mode-width { --img-w: 80%; --img-h: auto; --body-bg: #0F001A; }
+#slideshow.mode-height { --img-w: auto; --img-h: 100%; --body-bg: #0F001A; }
+#slideshow.mode-full { --img-w: 99%; --img-h: auto; --body-bg: #25001A; }
+
+#slideshow .slide-bg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.4s;
+}
+
+#slideshow.mode-width .slide-bg { background: #0F001A; }
+#slideshow.mode-height .slide-bg { background: #0F001A; }
+#slideshow.mode-full .slide-bg { background: #25001A; }
+
+#slideshow img#slide-img {
+  display: block;
+  object-fit: contain;
+  cursor: pointer;
+  transition: opacity 0.4s ease;
+  max-width: 100%;
+  max-height: 100%;
+}
+#slideshow.mode-width img#slide-img { width: 80%; height: auto; }
+#slideshow.mode-height img#slide-img { width: auto; height: 100%; }
+#slideshow.mode-full img#slide-img { width: 99%; height: auto; }
+
+@media (orientation: portrait) {
+  #slideshow img#slide-img { width: 99% !important; height: auto !important; }
+  #slideshow .slide-bg { background: #25001A !important; }
+}
+
+/* slide controls bar */
+.slide-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: rgba(10,0,15,0.95);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.slide-info {
+  font-size: 0.8rem;
+  color: var(--text2);
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.slide-filename {
+  font-size: 0.75rem;
+  color: var(--text2);
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* prev/next arrow overlay */
+.arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 2rem;
+  padding: 1rem 0.8rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 4px;
+  line-height: 1;
+}
+.arrow-btn:hover { background: rgba(0,0,0,0.75); color: #fff; }
+.arrow-btn.prev-arrow { left: 0; }
+.arrow-btn.next-arrow { right: 0; }
+
+/* progress bar */
+.progress-bar {
+  height: 2px;
+  background: rgba(124,58,237,0.25);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: none;
+}
+
+/* speed input */
+.speed-input {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8rem;
+  width: 60px;
+  text-align: center;
+}
+
+/* mode selector */
+.mode-pills {
+  display: flex;
+  gap: 4px;
+}
+.mode-pill {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.75rem;
+  transition: all 0.15s;
+}
+.mode-pill:hover { border-color: var(--accent); color: var(--text); }
+.mode-pill.active { background: rgba(124,58,237,0.4); border-color: var(--accent); color: #e0d0ff; }
+
+/* empty state */
+#empty-state {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--text2);
+  gap: 1rem;
+  padding: 3rem;
+  text-align: center;
+}
+#empty-state .big-icon { font-size: 4rem; opacity: 0.3; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.4); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ── LANDING ─────────────────────────────── -->
+<div id="landing">
+  <div class="logo">ZENJIO</div>
+  <div class="logo-sub">Photo Gallery</div>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" multiple accept="image/jpeg,image/jpg,image/png,image/bmp,image/gif,image/webp">
+    <span class="drop-icon">📁</span>
+    <strong>Bilder auswählen oder hierher ziehen</strong>
+    <p>JPG, PNG, BMP, GIF, WebP werden unterstützt</p>
+    <p style="margin-top:0.6rem; font-size:0.8rem;">Tipp: Strg+A zum Auswählen aller Dateien im Ordner</p>
+  </div>
+
+  <div style="margin-top: 2rem; width: 100%; max-width: 480px;">
+    <p style="font-size: 0.85rem; color: var(--text2); margin-bottom: 0.5rem;">Oder von einer Web-Adresse laden:</p>
+    <div style="display: flex; gap: 8px;">
+      <input type="text" id="urlInput" placeholder="https://beispiel.de/bilder/" 
+             style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg2); color: var(--text);">
+      <button class="btn green" onclick="loadFromURL()">Laden</button>
+    </div>
+  </div>
+
+  <div class="version">Zenjio Photo Gallery · Vers 3.0 · 2024 · www.juppijo.com</div>
+</div>
+
+<!-- ── MAIN APP ────────────────────────────── -->
+<div id="app">
+  <header>
+    <div class="header-logo">ZENJIO</div>
+    <div class="img-count" id="imgCount">0 Bilder</div>
+    <div class="spacer"></div>
+    <button class="btn" onclick="startSlideshow(0)">▶ Diashow</button>
+    <button class="btn green" onclick="startSlideshow(0, true)">⛶ Vollbild-Diashow</button>
+    <button class="btn" id="btnNewFolder" onclick="openNewFolder()">📂 Ordner wechseln</button>
+  </header>
+
+  <div id="gallery"></div>
+  <div id="empty-state">
+    <div class="big-icon">🖼</div>
+    <p>Keine Bilder gefunden. Bitte einen Ordner mit JPG/PNG/BMP-Dateien wählen.</p>
+  </div>
+</div>
+
+<!-- ── SLIDESHOW OVERLAY ───────────────────── -->
+<div id="slideshow" class="mode-height">
+  <div class="slide-controls" id="slideControls">
+    <button class="btn" onclick="closeSlideshowUI()">✕ Schließen</button>
+    <button class="btn" id="btnPlayPause" onclick="togglePlayPause()">⏸ Stop</button>
+    <button class="btn" onclick="prevSlide()">◀ Zurück</button>
+    <button class="btn" onclick="nextSlide()">Weiter ▶</button>
+    <button class="btn" onclick="requestFSImage()">⛶ Vollbild</button>
+    <button class="btn" onclick="exitFS()">⊠ Exit FS</button>
+    <div class="slide-info" id="slideInfo">1 / 1</div>
+    <div class="slide-filename" id="slideFilename">–</div>
+    <span style="font-size:0.78rem; color:var(--text2);">Interval:</span>
+    <input class="speed-input" id="speedInput" type="number" value="3" min="1" max="30" title="Sekunden pro Bild">s
+    <div class="mode-pills">
+      <button class="mode-pill" id="pWidth" onclick="setMode('mode-width')">Breite</button>
+      <button class="mode-pill active" id="pHeight" onclick="setMode('mode-height')">Höhe</button>
+      <button class="mode-pill" id="pFull" onclick="setMode('mode-full')">Groß</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="slide-bg" id="slideBg">
+    <button class="arrow-btn prev-arrow" id="prevArrow" onclick="prevSlide()">&#8249;</button>
+    <img id="slide-img" src="" alt="" onclick="nextSlide()">
+    <button class="arrow-btn next-arrow" id="nextArrow" onclick="nextSlide()">&#8250;</button>
+  </div>
+</div>
+
+<script>
+// ── State ─────────────────────────────────────
+let images = [];        // {name, url}
+let currentIdx = 0;
+let isPlaying = false;
+let slideTimer = null;
+let progressTimer = null;
+let progressStart = null;
+
+// ── File loading ──────────────────────────────
+const fileInput = document.getElementById('fileInput');
+const dropZone  = document.getElementById('dropZone');
+
+fileInput.addEventListener('change', e => loadFiles(e.target.files));
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  loadFiles(e.dataTransfer.files);
+});
+
+function openNewFolder() {
+  fileInput.click();
+}
+
+function loadFiles(fileList) {
+  const allowed = ['jpg','jpeg','png','bmp','gif','webp'];
+  const newImgs = [];
+  const arr = Array.from(fileList);
+  arr.sort((a,b) => a.name.localeCompare(b.name));
+
+  arr.forEach(f => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (allowed.includes(ext)) {
+      newImgs.push({ name: f.name, url: URL.createObjectURL(f) });
+    }
+  });
+
+  // revoke old
+  images.forEach(img => URL.revokeObjectURL(img.url));
+  images = newImgs;
+
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+
+  renderGallery();
+}
+
+// ── Gallery ───────────────────────────────────
+function renderGallery() {
+  const gallery = document.getElementById('gallery');
+  const empty   = document.getElementById('empty-state');
+  document.getElementById('imgCount').textContent = images.length + ' Bild' + (images.length !== 1 ? 'er' : '');
+
+  if (images.length === 0) {
+    gallery.style.display = 'none';
+    empty.style.display = 'flex';
+    return;
+  }
+
+  gallery.style.display = 'grid';
+  empty.style.display = 'none';
+  gallery.innerHTML = '';
+
+  images.forEach((img, i) => {
+    const card = document.createElement('div');
+    card.className = 'thumb-card';
+    card.innerHTML = `
+      <img src="${img.url}" alt="${img.name}" loading="lazy">
+      <div class="thumb-num">${i + 1}</div>
+      <div class="thumb-label">${img.name}</div>
+    `;
+    card.addEventListener('click', () => startSlideshow(i));
+    gallery.appendChild(card);
+  });
+}
+
+// ── Slideshow ─────────────────────────────────
+function startSlideshow(idx, fullscreen = false) {
+  if (images.length === 0) return;
+  currentIdx = idx || 0;
+  document.getElementById('slideshow').style.display = 'flex';
+  showSlide(currentIdx);
+  isPlaying = true;
+  updatePlayBtn();
+  scheduleNext();
+  if (fullscreen) requestFSSlide();
+}
+
+function closeSlideshowUI() {
+  stopPlay();
+  document.getElementById('slideshow').style.display = 'none';
+  if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+}
+
+function showSlide(idx) {
+  if (images.length === 0) return;
+  idx = ((idx % images.length) + images.length) % images.length;
+  currentIdx = idx;
+  const img = document.getElementById('slide-img');
+  img.style.opacity = '0';
+  img.src = images[idx].url;
+  img.alt = images[idx].name;
+  img.onload = () => { img.style.opacity = '1'; };
+  document.getElementById('slideInfo').textContent = (idx+1) + ' / ' + images.length;
+  document.getElementById('slideFilename').textContent = images[idx].name;
+  resetProgress();
+}
+
+function nextSlide() { showSlide(currentIdx + 1); if (isPlaying) scheduleNext(); }
+function prevSlide() { showSlide(currentIdx - 1); if (isPlaying) scheduleNext(); }
+
+function togglePlayPause() {
+  isPlaying = !isPlaying;
+  if (isPlaying) scheduleNext(); else stopPlay();
+  updatePlayBtn();
+}
+
+function updatePlayBtn() {
+  document.getElementById('btnPlayPause').textContent = isPlaying ? '⏸ Stop' : '▶ Start';
+}
+
+function getInterval() {
+  const v = parseFloat(document.getElementById('speedInput').value) || 3;
+  return Math.max(1, v) * 1000;
+}
+
+function scheduleNext() {
+  clearTimeout(slideTimer);
+  startProgress();
+  slideTimer = setTimeout(() => {
+    showSlide(currentIdx + 1);
+    if (isPlaying) scheduleNext();
+  }, getInterval());
+}
+
+function stopPlay() {
+  clearTimeout(slideTimer);
+  cancelAnimationFrame(progressTimer);
+  isPlaying = false;
+  document.getElementById('progressFill').style.width = '0%';
+}
+
+// Progress bar animation
+function startProgress() {
+  cancelAnimationFrame(progressTimer);
+  progressStart = performance.now();
+  const dur = getInterval();
+  const fill = document.getElementById('progressFill');
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+
+  function step(now) {
+    const elapsed = now - progressStart;
+    const pct = Math.min((elapsed / dur) * 100, 100);
+    fill.style.width = pct + '%';
+    if (pct < 100) progressTimer = requestAnimationFrame(step);
+  }
+  progressTimer = requestAnimationFrame(step);
+}
+
+function resetProgress() {
+  cancelAnimationFrame(progressTimer);
+  document.getElementById('progressFill').style.width = '0%';
+}
+
+// ── Display modes ─────────────────────────────
+function setMode(mode) {
+  const ss = document.getElementById('slideshow');
+  ss.classList.remove('mode-width','mode-height','mode-full');
+  ss.classList.add(mode);
+  document.getElementById('pWidth').classList.toggle('active', mode==='mode-width');
+  document.getElementById('pHeight').classList.toggle('active', mode==='mode-height');
+  document.getElementById('pFull').classList.toggle('active', mode==='mode-full');
+}
+
+// ── Fullscreen ────────────────────────────────
+function requestFSSlide() {
+  const el = document.getElementById('slideshow');
+  if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+
+function requestFSImage() {
+  const el = document.getElementById('slide-img');
+  if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+
+function exitFS() {
+  if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+  else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+}
+
+// NEU: Funktion zum Laden von Bildern über eine URL oder den aktuellen Pfad
+async function loadFromURL(customURL = null) {
+  const url = customURL || document.getElementById('urlInput').value.trim();
+  if (!url) return;
+
+  // Wir versuchen typische Dateinamen zu raten, da JS keinen direkten Index lesen kann
+  // außer der Server erlaubt "Directory Listing". 
+  // Für GitHub Pages oder strukturierte Server ist oft eine Liste nötig.
+  
+  // Beispiel für eine manuelle Liste oder ein Muster (01.jpg, 02.jpg etc.)
+  // Da man Webseiten nicht "scannen" kann, ist hier ein kleiner Trick nötig:
+  alert("Hinweis: Das direkte Scannen von fremden Webseiten ist durch Browser-Sicherheit (CORS) eingeschränkt. Bilder im aktuellen Verzeichnis werden nun geladen.");
+  
+  // Falls du die Bilder in deinem GitHub-Repo hast, können wir sie so ansprechen:
+  renderGalleryFromList(url); 
+}
+
+// Wenn die Seite lädt: Prüfen, ob wir im Web-Modus sind
+window.addEventListener('DOMContentLoaded', () => {
+  const currentPath = window.location.href;
+  if (currentPath.startsWith('http')) {
+    console.log("Galerie läuft auf einem Server: " + currentPath);
+    // Hier könnte man eine Standard-URL laden:
+    // loadFromURL(currentPath);
+  }
+});
+
+function renderGalleryFromList(baseUrl) {
+  // Sicherstellen, dass die URL mit / endet
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  
+  // Da JS keine Dateiliste vom Server bekommt, müsstest du hier 
+  // entweder die Namen kennen oder eine JSON-Datei mit den Namen laden.
+  // Hier ein Beispiel, wie man 10 Testbilder generiert, wenn man das Muster kennt:
+  const webImgs = [];
+  for(let i=1; i<=20; i++) {
+    // Beispiel für 8-Brokate: 01.jpg, 02.jpg...
+    let fileName = "image" + i.toString().padStart(1, '0') + ".png"; 
+    webImgs.push({ name: fileName, url: baseUrl + fileName });
+  }
+
+  images = webImgs;
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  renderGallery();
+}
+
+//*****************************************************************
+
+// hide/show controls in true fullscreen
+document.addEventListener('fullscreenchange', () => {
+  const inFS = !!document.fullscreenElement;
+  document.getElementById('slideControls').style.display = inFS ? 'none' : 'flex';
+  document.getElementById('prevArrow').style.display = inFS ? 'flex' : 'none';
+  document.getElementById('nextArrow').style.display = inFS ? 'flex' : 'none';
+  document.querySelector('.progress-bar').style.display = inFS ? 'none' : 'block';
+});
+
+// ── Keyboard ──────────────────────────────────
+document.addEventListener('keydown', e => {
+  const ss = document.getElementById('slideshow');
+  if (ss.style.display === 'none') return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') prevSlide();
+  if (e.key === 'Escape') closeSlideshowUI();
+  if (e.key === 'f' || e.key === 'F') requestFSSlide();
+  if (e.key === 'p' || e.key === 'P') togglePlayPause();
+});
+
+// ── Touch swipe ────────────────────────────────
+let touchX = null;
+document.getElementById('slideBg').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive:true});
+document.getElementById('slideBg').addEventListener('touchend', e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 40) { if (dx < 0) nextSlide(); else prevSlide(); }
+  touchX = null;
+}, {passive:true});
+</script>
+</body>
+</html>
