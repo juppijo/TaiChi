@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8 Brokate · Baduanjin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f8f5f0;
+  --bg2:      #eeebe4;
+  --surface:  rgba(255,255,255,0.72);
+  --text:     #2a3328;
+  --muted:    #7a8a78;
+  --accent:   #4e7244;
+  --accent2:  #9ab58a;
+  --border:   rgba(80,110,70,0.18);
+  --sborder:  rgba(80,110,70,0.08);
+  --btnbg:    rgba(255,255,255,0.82);
+  --btnhov:   rgba(78,114,68,0.10);
+  --ring:     rgba(78,114,68,0.16);
+  --timer-c:  #4e7244;
+  --timer-t:  rgba(78,114,68,0.08);
+  --progress: #4e7244;
+}
+[data-theme="dark"] {
+  --bg:       #141a14;
+  --bg2:      #1a221a;
+  --surface:  rgba(26,34,26,0.88);
+  --text:     #ccdfc4;
+  --muted:    #6e8e66;
+  --accent:   #88bb7a;
+  --accent2:  #4a6a40;
+  --border:   rgba(100,160,80,0.18);
+  --sborder:  rgba(100,160,80,0.07);
+  --btnbg:    rgba(30,44,28,0.90);
+  --btnhov:   rgba(88,150,70,0.16);
+  --ring:     rgba(88,150,70,0.20);
+  --timer-c:  #88bb7a;
+  --timer-t:  rgba(88,150,70,0.10);
+  --progress: #88bb7a;
+}
+[data-theme="zen"] {
+  --bg:       #fafaf8;
+  --bg2:      #f3f3f0;
+  --surface:  rgba(255,255,255,0.60);
+  --text:     #1a1a18;
+  --muted:    #8c8c88;
+  --accent:   #303030;
+  --accent2:  #909090;
+  --border:   rgba(0,0,0,0.09);
+  --sborder:  rgba(0,0,0,0.04);
+  --btnbg:    rgba(255,255,255,0.65);
+  --btnhov:   rgba(0,0,0,0.05);
+  --ring:     rgba(0,0,0,0.08);
+  --timer-c:  #303030;
+  --timer-t:  rgba(0,0,0,0.05);
+  --progress: #303030;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%; overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lora', serif;
+  transition: background .35s, color .35s;
+}
+
+/* ── LAYOUT ─────────────────────────────────────── */
+.app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: 100vh;
+  height: 100vh;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-head {
+  padding: 28px 22px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 300;
+  letter-spacing: .06em;
+  color: var(--accent);
+  line-height: 1;
+}
+.brand-sub {
+  font-size: .72rem; font-style: italic;
+  color: var(--muted); letter-spacing: .12em;
+  margin-top: 3px; display: block;
+}
+.nav-list {
+  list-style: none;
+  overflow-y: auto; flex: 1;
+  padding: 10px 8px 16px;
+}
+.nav-list::-webkit-scrollbar { width: 3px; }
+.nav-list::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
+.nav-btn {
+  width: 100%; text-align: left;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); font-family: 'Lora', serif;
+  font-size: .82rem; line-height: 1.35;
+  padding: 9px 12px; border-radius: 5px;
+  display: flex; align-items: flex-start; gap: 10px;
+  transition: background .18s, color .18s;
+  margin-bottom: 1px;
+}
+.nav-btn:hover   { background: var(--btnhov); }
+.nav-btn.active  { background: var(--btnhov); color: var(--accent); }
+.nav-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; line-height: 1;
+  color: var(--accent2); min-width: 18px; flex-shrink: 0;
+  margin-top: 1px;
+}
+.nav-check {
+  margin-left: auto; color: var(--accent); font-size: .8rem;
+  opacity: 0; flex-shrink: 0; margin-top: 1px;
+}
+.nav-btn.done .nav-check { opacity: 1; }
+
+/* ── MAIN ────────────────────────────────────────── */
+.main {
+  display: grid;
+  grid-template-rows: 3px 1fr 60px;
+  height: 100vh; overflow: hidden;
+}
+
+/* session progress line */
+.prog-line {
+  background: var(--border);
+  position: relative;
+}
+.prog-fill {
+  position: absolute; inset: 0;
+  background: var(--progress);
+  transition: width .8s linear;
+  width: 0%;
+}
+
+/* content area */
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* ── IMAGE PANEL ─────────────────────────────────── */
+.img-panel {
+  background: var(--bg2);
+  position: relative; overflow: hidden;
+  border-right: 1px solid var(--sborder);
+}
+.slide {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px;
+  opacity: 0; transition: opacity .9s ease;
+  pointer-events: none;
+}
+.slide.on { opacity: 1; pointer-events: auto; }
+.slide img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  border-radius: 3px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.07);
+  transition: transform .35s ease;
+}
+.slide img:hover { transform: scale(1.025); }
+.img-dots {
+  position: absolute; bottom: 14px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 7px;
+}
+.dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent2); opacity: .35;
+  transition: opacity .3s, transform .3s;
+}
+.dot.on { opacity: 1; transform: scale(1.3); }
+.ex-big-num {
+  position: absolute; top: 14px; left: 18px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem; font-weight: 300; line-height: 1;
+  color: var(--border); pointer-events: none;
+  user-select: none;
+}
+
+/* ── INFO PANEL ──────────────────────────────────── */
+.info-panel {
+  padding: 28px 30px;
+  overflow-y: auto; background: var(--bg);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.info-panel::-webkit-scrollbar { width: 3px; }
+.info-panel::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
+
+.ex-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem; font-weight: 400; line-height: 1.2;
+  color: var(--accent);
+}
+.ex-cn {
+  font-size: .75rem; font-style: italic;
+  color: var(--muted); letter-spacing: .06em;
+}
+
+/* timer area */
+.timer-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 10px 0;
+}
+.ring-wrap {
+  position: relative; width: 76px; height: 76px; flex-shrink: 0;
+}
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-bg   { fill: none; stroke: var(--timer-t); stroke-width: 5; }
+.ring-arc  {
+  fill: none; stroke: var(--timer-c); stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .95s linear;
+}
+.ring-txt {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; color: var(--accent);
+}
+.timer-meta { flex: 1; }
+.timer-label {
+  font-size: .68rem; text-transform: uppercase;
+  letter-spacing: .13em; color: var(--muted); margin-bottom: 3px;
+}
+.timer-total {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; color: var(--text);
+}
+
+/* info cards */
+.icard {
+  background: var(--surface);
+  border-left: 2px solid var(--accent2);
+  border-radius: 0 5px 5px 0;
+  padding: 13px 16px;
+  backdrop-filter: blur(4px);
+}
+.icard-lbl {
+  font-size: .66rem; text-transform: uppercase;
+  letter-spacing: .14em; color: var(--muted); margin-bottom: 6px;
+}
+.icard-txt {
+  font-size: .88rem; line-height: 1.75;
+}
+
+/* ── CONTROLS BAR ────────────────────────────────── */
+.cbar {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 18px;
+  flex-wrap: nowrap; overflow: hidden;
+}
+.sp { flex: 1; }
+
+.btn {
+  background: var(--btnbg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  padding: 0 13px; height: 36px;
+  font-family: 'Lora', serif; font-size: .78rem;
+  cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+  transition: background .18s, transform .1s, border-color .18s;
+  flex-shrink: 0;
+}
+.btn:hover  { background: var(--btnhov); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn.pri {
+  background: var(--accent); color: var(--bg);
+  border-color: var(--accent);
+}
+.btn.pri:hover { opacity: .88; }
+.btn.lit { color: var(--accent); border-color: var(--accent2); }
+
+.time-wrap {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .78rem; flex-shrink: 0;
+}
+.time-wrap input {
+  width: 48px; height: 34px;
+  background: var(--btnbg); border: 1px solid var(--border);
+  border-radius: 5px; color: var(--text);
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+  text-align: center; padding: 0 4px;
+  transition: border-color .18s;
+}
+.time-wrap input:focus { outline: none; border-color: var(--accent); }
+.time-wrap span { color: var(--muted); }
+
+.themes { display: flex; gap: 5px; flex-shrink: 0; }
+.tb {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: transform .18s, border-color .18s;
+  flex-shrink: 0;
+}
+.tb:hover { transform: scale(1.12); }
+.tb.on    { border-color: var(--accent); }
+.tb.light { background: #f0ece4; }
+.tb.dark  { background: #1a221a; }
+.tb.zen   { background: linear-gradient(135deg,#fafaf8 50%,#1a1a18 50%); }
+
+/* ── TRANSITIONS ─────────────────────────────────── */
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.info-panel > * { animation: fadeup .38s ease both; }
+.info-panel > *:nth-child(2) { animation-delay: .04s; }
+.info-panel > *:nth-child(3) { animation-delay: .08s; }
+.info-panel > *:nth-child(4) { animation-delay: .12s; }
+.info-panel > *:nth-child(5) { animation-delay: .16s; }
+.info-panel > *:nth-child(6) { animation-delay: .20s; }
+
+/* ── FULLSCREEN ──────────────────────────────────── */
+:fullscreen .app,
+:-webkit-full-screen .app { height: 100vh; }
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .content { grid-template-columns: 1fr; grid-template-rows: 42vh 1fr; }
+}
+@media (max-width: 600px) {
+  .cbar { gap: 5px; padding: 0 10px; }
+  .btn  { padding: 0 8px; font-size: .72rem; }
+  .time-wrap input { width: 40px; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div class="brand">8 Brokate</div>
+      <span class="brand-sub">八段锦 · Baduanjin</span>
+    </div>
+    <ul class="nav-list" id="navList"></ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="prog-line"><div class="prog-fill" id="progFill"></div></div>
+
+    <div class="content">
+      <!-- Image Panel -->
+      <div class="img-panel" id="imgPanel">
+        <div class="ex-big-num" id="bigNum">01</div>
+        <div class="img-dots" id="imgDots"></div>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="info-panel" id="infoPanel"></div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="cbar">
+      <button class="btn" onclick="goPrev()" title="Zurück">&#9664;</button>
+      <button class="btn pri" id="ppBtn" onclick="togglePlay()">&#9654; Start</button>
+      <button class="btn" onclick="goNext()" title="Weiter">&#9654;&#9654;</button>
+
+      <div class="sp"></div>
+
+      <div class="time-wrap">
+        <span>&#8987;</span>
+        <input type="number" id="minInput" value="8" min="1" max="99" onchange="resetTimer()">
+        <span>Min</span>
+      </div>
+
+      <button class="btn" id="musicBtn" onclick="toggleMusic()">&#9836; Musik</button>
+      <button class="btn lit" id="gongBtn" onclick="toggleGong()">&#9679; Gong</button>
+
+      <div class="themes">
+        <button class="tb light on" id="tl" onclick="setTheme('light')" title="Hell"></button>
+        <button class="tb zen"   id="tz" onclick="setTheme('zen')"   title="Zen"></button>
+        <button class="tb dark"  id="td" onclick="setTheme('dark')"  title="Dunkel"></button>
+      </div>
+
+      <button class="btn" onclick="goFullscreen()" title="Vollbild">&#9974;</button>
+    </div>
+  </main>
+</div>
+
+<script>
+const EX = [
+  {
+    num:1, title:"Zwei Hände stützen den Himmel",
+    cn:"Shuang Shou Tuo Tian Li San Jiao",
+    imgs:["images/image8.png","images/image16.png"],
+    anl:"Aus der Grundposition einatmen, Hände nach oben führen und in Brusthöhe verhaken. Über den Kopf nach oben drehen (evtl. auf Zehenspitzen). Beim Ausatmen leicht in die Knie gehen, Arme zur Erde führen. 3–9 Mal wiederholen.",
+    wkg:"Reguliert den <em>Dreifachen Erwärmer</em>, streckt die Wirbelsäule und hilft bei Fatigue."
+  },
+  {
+    num:2, title:"Den Bogen spannen und auf den Adler zielen",
+    cn:"Zuo You Kai Gong Si She Diao",
+    imgs:["images/image11.png","images/image9.png"],
+    anl:"Im Reiterstand den Bogen spannen. Die vordere Hand formt ein »L« mit Daumen und Zeigefinger. Fokus und Blick scharf halten. 3–9 Mal pro Seite.",
+    wkg:"Stärkt Herz, Lunge und Beine. Verbessert Konzentration und wirkt auf den Lebermeridian."
+  },
+  {
+    num:3, title:"Himmel und Erde verbinden",
+    cn:"Tiao Li Pi Wei Dan Ju Shou",
+    imgs:["images/image12.png","images/image4.png","images/image17.png"],
+    anl:"Die Hände kraftvoll auseinanderpressen (eine zum Himmel, eine zur Erde). 3–9 Mal pro Seite.",
+    wkg:"Stärkt Milz und Magen (Erdelement). Wirkt zentrierend und stabilisierend."
+  },
+  {
+    num:4, title:"Die 5 Übel & 7 Leiden hinter sich lassen",
+    cn:"Wu Lao Qi Shang Xiang Hou Qiao",
+    imgs:["images/image5.png","images/image2.png"],
+    anl:"Beim Ausatmen zur Seite schauen, Arme öffnen (Handflächen nach vorn). Einatmen zur Mitte. 3–9 Mal pro Seite.",
+    wkg:"Stärkt Nacken und Augen. Reguliert das Nervensystem bei Schlaflosigkeit und Reizbarkeit."
+  },
+  {
+    num:5, title:"Die Ente wackelt mit dem Schwanz",
+    cn:"Yao Tou Bai Wei Qu Xin Huo",
+    imgs:["images/image1.png","images/image19.png"],
+    anl:"Im weiten Stand den Oberkörper kreisend von einem Bein zum anderen führen. 3–9 Zyklen.",
+    wkg:"Eliminiert »Herzfeuer«, beruhigt den Geist und hilft bei innerer Unruhe."
+  },
+  {
+    num:6, title:"Nach vorne beugen, um die Nieren zu stärken",
+    cn:"Liang Shou Pan Jiao Gu Shen Yao",
+    imgs:["images/image15.png","images/image14.png","images/image10.png"],
+    anl:"Hände auf Nierenhöhe, beim Ausatmen an den Beinrückseiten entlang nach unten streichen. 3–9 Mal.",
+    wkg:"Stärkt Nieren und Lendenwirbelsäule. <strong>Achtung bei Bluthochdruck!</strong>"
+  },
+  {
+    num:7, title:"Mit den Fäusten stoßen & mit den Augen funkeln",
+    cn:"Wo Quan Nu Mu Zheng Qi Li",
+    imgs:["images/image3.png","images/image6.png"],
+    anl:"Aus der Taille heraus boxen, dabei einen fokussierten, zornigen Blick bewahren. 3–9 Mal.",
+    wkg:"Vermehrt Qi und Stärke, vermindert Ärger, hilft bei der Entgiftung der Leber."
+  },
+  {
+    num:8, title:"Den Rücken schütteln",
+    cn:"Bei Hou Qi Dian Bai Bing Xiao",
+    imgs:["images/image18.png","images/image7.png"],
+    anl:"Auf die Fußballen kommen und die Fersen sanft in den Boden sinken lassen (erschüttern). 3–9 Mal.",
+    wkg:"Vertreibt trübes Qi, energetisiert bei Müdigkeit und verteilt die Energie im ganzen Körper."
+  }
+];
+
+let idx = 0, imgIdx = 0;
+let imgTmr = null, sesTmr = null;
+let playing = false;
+let musicOn = false, gongOn = true;
+let totalSec = 8 * 60;
+let perSec   = totalSec / EX.length;
+let remPer   = perSec;
+let remTot   = totalSec;
+let done     = new Set();
+let musicAud = null, gongAud = null;
+
+/* ── NAV ─── */
+function buildNav() {
+  const ul = document.getElementById('navList');
+  ul.innerHTML = EX.map((e,i)=>`
+    <li><button class="nav-btn${i===idx?' active':''}${done.has(i)?' done':''}" onclick="jumpTo(${i})">
+      <span class="nav-num">${e.num}</span>
+      <span>${e.title}</span>
+      <span class="nav-check">✓</span>
+    </button></li>`).join('');
+}
+
+/* ── RENDER ─── */
+function render() {
+  const e = EX[idx];
+
+  /* big number */
+  document.getElementById('bigNum').textContent = String(e.num).padStart(2,'0');
+
+  /* slides */
+  const panel = document.getElementById('imgPanel');
+  panel.querySelectorAll('.slide').forEach(s=>s.remove());
+  e.imgs.forEach((src,i)=>{
+    const d = document.createElement('div');
+    d.className = 'slide'+(i===0?' on':'');
+    const img = document.createElement('img');
+    img.src = src; img.alt = e.title;
+    d.appendChild(img);
+    panel.insertBefore(d, document.getElementById('imgDots'));
+  });
+  imgIdx = 0;
+  buildDots();
+
+  /* info */
+  document.getElementById('infoPanel').innerHTML = `
+    <div class="ex-title">${e.title}</div>
+    <div class="ex-cn">${e.cn}</div>
+    <div class="timer-row">
+      <div class="ring-wrap">
+        <svg width="76" height="76" viewBox="0 0 76 76">
+          <circle class="ring-bg"  cx="38" cy="38" r="31"/>
+          <circle class="ring-arc" id="arc" cx="38" cy="38" r="31"
+            stroke-dasharray="${(2*Math.PI*31).toFixed(2)}"
+            stroke-dashoffset="0"/>
+        </svg>
+        <div class="ring-txt" id="ringTxt">${fmt(remPer)}</div>
+      </div>
+      <div class="timer-meta">
+        <div class="timer-label">Übungszeit pro Brokat</div>
+        <div class="timer-total" id="totTxt">${fmt(remTot)} gesamt</div>
+      </div>
+    </div>
+    <div class="icard">
+      <div class="icard-lbl">Anleitung</div>
+      <div class="icard-txt">${e.anl}</div>
+    </div>
+    <div class="icard">
+      <div class="icard-lbl">Wirkung</div>
+      <div class="icard-txt">${e.wkg}</div>
+    </div>`;
+
+  updateArc();
+  buildNav();
+  updateProg();
+}
+
+function buildDots() {
+  const e = EX[idx];
+  const d = document.getElementById('imgDots');
+  d.innerHTML = e.imgs.map((_,i)=>`<div class="dot${i===0?' on':''}"></div>`).join('');
+}
+
+/* ── TIMER ─── */
+function fmt(s) {
+  s = Math.max(0,Math.floor(s));
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+
+function updateArc() {
+  const arc = document.getElementById('arc');
+  const txt = document.getElementById('ringTxt');
+  if (!arc||!txt) return;
+  const c   = 2*Math.PI*31;
+  const frac = Math.max(0, remPer/perSec);
+  arc.style.strokeDashoffset = (c*(1-frac)).toFixed(2);
+  txt.textContent = fmt(remPer);
+}
+
+function updateProg() {
+  const el = document.getElementById('progFill');
+  if (el) el.style.width = (Math.max(0,(totalSec-remTot)/totalSec)*100).toFixed(2)+'%';
+  const t = document.getElementById('totTxt');
+  if (t) t.textContent = fmt(remTot)+' gesamt';
+}
+
+/* ── PLAY / PAUSE ─── */
+function togglePlay() {
+  playing ? pause() : play();
+}
+
+function play() {
+  playing = true;
+  document.getElementById('ppBtn').innerHTML = '&#9646;&#9646; Pause';
+  startImgCycle();
+  tryMusic();
+  sesTmr = setInterval(tick, 1000);
+}
+
+function pause() {
+  playing = false;
+  clearInterval(sesTmr);
+  clearInterval(imgTmr);
+  document.getElementById('ppBtn').innerHTML = '&#9654; Weiter';
+  if (musicAud) musicAud.pause();
+}
+
+function tick() {
+  remPer--; remTot--;
+  updateArc(); updateProg();
+  if (remPer <= 0) {
+    done.add(idx);
+    if (idx < EX.length-1) {
+      fireGong();
+      clearInterval(imgTmr);
+      setTimeout(()=>{ idx++; remPer=perSec; render(); if(playing) startImgCycle(); }, 700);
+    } else {
+      clearInterval(sesTmr); playing=false;
+      done.add(idx);
+      document.getElementById('ppBtn').innerHTML = '✓ Beendet';
+      if (musicAud) musicAud.pause();
+      fireGong(); buildNav();
+    }
+  }
+  if (remTot<=0) { clearInterval(sesTmr); playing=false; }
+}
+
+/* ── IMAGES ─── */
+function startImgCycle() {
+  clearInterval(imgTmr);
+  const imgs = EX[idx].imgs;
+  if (imgs.length<2) return;
+  imgTmr = setInterval(()=>{
+    const slides = document.querySelectorAll('.slide');
+    const dots   = document.querySelectorAll('.dot');
+    if (slides.length<2) return;
+    slides[imgIdx].classList.remove('on');
+    if (dots[imgIdx]) dots[imgIdx].classList.remove('on');
+    imgIdx = (imgIdx+1) % imgs.length;
+    slides[imgIdx].classList.add('on');
+    if (dots[imgIdx]) dots[imgIdx].classList.add('on');
+  }, 4200);
+}
+
+/* ── NAVIGATION ─── */
+function jumpTo(i) {
+  if (playing) pause();
+  idx=i; remPer=perSec; render();
+}
+function goPrev() {
+  if (playing) pause();
+  if (idx>0){ idx--; remPer=perSec; render(); }
+}
+function goNext() {
+  if (playing) pause();
+  if (idx<EX.length-1){ idx++; remPer=perSec; render(); }
+}
+
+/* ── TIMER RESET ─── */
+function resetTimer() {
+  const v = parseInt(document.getElementById('minInput').value)||8;
+  totalSec = v*60;
+  perSec   = totalSec/EX.length;
+  remTot   = totalSec;
+  remPer   = perSec;
+  if (playing) pause();
+  render();
+}
+
+/* ── AUDIO ─── */
+function tryMusic() {
+  if (!musicOn) return;
+  if (!musicAud) { musicAud=new Audio('QiGong.mp3'); musicAud.loop=true; musicAud.volume=.45; }
+  musicAud.play().catch(()=>{});
+}
+function toggleMusic() {
+  musicOn = !musicOn;
+  const b = document.getElementById('musicBtn');
+  b.classList.toggle('lit', musicOn);
+  b.innerHTML = (musicOn?'&#9836;':'&#9834;')+' Musik';
+  if (!musicAud) { musicAud=new Audio('QiGong.mp3'); musicAud.loop=true; musicAud.volume=.45; }
+  if (musicOn && playing) musicAud.play().catch(()=>{});
+  else if (!musicOn) musicAud.pause();
+}
+function toggleGong() {
+  gongOn = !gongOn;
+  const b = document.getElementById('gongBtn');
+  b.classList.toggle('lit', gongOn);
+  b.innerHTML = (gongOn?'&#9679;':'&#9675;')+' Gong';
+  if (!gongAud) gongAud=new Audio('Gong.mp3');
+}
+function fireGong() {
+  if (!gongOn) return;
+  if (!gongAud) gongAud=new Audio('Gong.mp3');
+  gongAud.currentTime=0;
+  gongAud.play().catch(()=>{});
+}
+
+/* ── THEME ─── */
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme',t);
+  ['light','zen','dark'].forEach(n=>{
+    const id = n==='light'?'tl':n==='zen'?'tz':'td';
+    document.getElementById(id).classList.toggle('on', n===t);
+  });
+}
+
+/* ── FULLSCREEN ─── */
+function goFullscreen() {
+  const el = document.getElementById('app');
+  if (!document.fullscreenElement) el.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+}
+
+/* ── INIT ─── */
+gongAud = new Audio('Gong.mp3');
+render();
+</script>
+</body>
+</html>
